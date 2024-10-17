@@ -219,7 +219,7 @@ class JudgeAgent:
     def ask_anything(self, question: str):
 
         workflow = ["workspace", "locate", "read", "search"]
-        llm_stats, start_time = self.get_evidence(
+        llm_stats, start_time = self.check_requirement(
             criteria=question, workflow=workflow, user_query=question
         )
         evidence = truncate_string(
