@@ -170,3 +170,9 @@ Dockerfile
 
 # pycache
 */__pycache__/
+
+# Ignore all .env files in the repository
+.env
+
+# Ignore all judge files
+*/judge/
