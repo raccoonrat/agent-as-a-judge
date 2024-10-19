@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "devai"
+name = "agent-as-a-judge"
 version = "0.1.5"
 description = "This project contains the source code for the paper [Agent-as-a-Judge: Evaluating Agents with Agents]."
 authors = ["Mingchen Zhuge <mingchen.zhuge@kaust.edu.sa>"]
