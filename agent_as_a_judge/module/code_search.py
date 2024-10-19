@@ -2,6 +2,7 @@
 DevCodeSearch: A class for searching and displaying code snippets and their metadata.
 """
 
+import os
 import io
 import json
 import pickle
@@ -10,6 +11,7 @@ import numpy as np
 from typing import List, Dict, Any, Generator, Union
 import networkx as nx
 import spacy
+from dotenv import load_dotenv
 from pathlib import Path
 from rank_bm25 import BM25Okapi
 from sentence_transformers import SentenceTransformer, util
@@ -397,11 +399,18 @@ class DevCodeSearch:
 
 
 if __name__ == "__main__":
-    judge_path = Path(
-        "/Users/zhugem/Desktop/DevAI/benchmark/judgment/OpenHands/agent_as_a_judge/black_box/01_Image_Classification_ResNet18_Fashion_MNIST_DL"
+
+    load_dotenv()
+    workspace_path = (
+        Path(os.getenv("PROJECT_DIR"))
+        / "benchmark/workspace/OpenHands/39_Drug_Response_Prediction_SVM_GDSC_ML"
     )
-    judge_path.mkdir(parents=True, exist_ok=True)
-    dev_search = DevCodeSearch(judge_path)
+    judge_dir = (
+        Path(os.getenv("PROJECT_DIR"))
+        + "/benchmark/judgement/OpenHands/39_Drug_Response_Prediction_SVM_GDSC_ML"
+    )
+    judge_dir.mkdir(parents=True, exist_ok=True)
+    dev_search = DevCodeSearch(judge_dir)
 
     query = "The FashionMnist datset is loaded in `src/data_loader.py`."
     search_results = dev_search.embed_search(query)

@@ -924,15 +924,17 @@ class DevGraph:
 
 if __name__ == "__main__":
 
-    workspace_path = "/Users/zhugem/Desktop/DevAI/benchmark/workspaces/OpenHands/39_Drug_Response_Prediction_SVM_GDSC_ML/"
     load_dotenv()
-    judge_dir = os.getenv("JUDGE_DIR")
-    if judge_dir is None:
-        raise ValueError("The JUDGE_DIR environment variable is not set")
+    workspace_path = (
+        Path(os.getenv("PROJECT_DIR"))
+        / "benchmark/workspace/OpenHands/39_Drug_Response_Prediction_SVM_GDSC_ML"
+    )
+    judge_path = (
+        Path(os.getenv("PROJECT_DIR"))
+        + "/benchmark/judgement/OpenHands/39_Drug_Response_Prediction_SVM_GDSC_ML"
+    )
+    judge_path.mkdir(parents=True, exist_ok=True)
     sample_name = os.path.basename(os.path.normpath(workspace_path))
-    judge_path = os.path.join(judge_dir, sample_name)
-    if not os.path.exists(judge_path):
-        os.makedirs(judge_path)
 
     dev_graph = DevGraph(
         root=workspace_path,

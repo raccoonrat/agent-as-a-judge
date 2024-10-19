@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 def truncate_string(
     info_string: Union[str, None],
     model: str = os.getenv("DEFAULT_LLM"),

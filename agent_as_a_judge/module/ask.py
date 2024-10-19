@@ -118,8 +118,15 @@ class DevAsk:
 
 if __name__ == "__main__":
     load_dotenv()
-    workspace_path = Path("/Users/zhugem/Desktop/DevAI/studio/workspace/sample/")
-    judge_dir = Path(os.getenv("JUDGE_DIR", "./judge_workspace"))
+    workspace_path = (
+        Path(os.getenv("PROJECT_DIR"))
+        / "benchmark/workspace/OpenHands/39_Drug_Response_Prediction_SVM_GDSC_ML"
+    )
+    judge_dir = (
+        Path(os.getenv("PROJECT_DIR"))
+        + "/benchmark/judgement/OpenHands/39_Drug_Response_Prediction_SVM_GDSC_ML"
+    )
+    judge_dir.mkdir(parents=True, exist_ok=True)
     dev_ask = DevAsk(workspace=workspace_path, judge_dir=judge_dir)
 
     while True:

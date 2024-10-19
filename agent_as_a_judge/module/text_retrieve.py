@@ -299,11 +299,13 @@ class DevTextRetrieve:
 
 
 if __name__ == "__main__":
-    import dotenv
+    from dotenv import load_dotenv
 
-    dotenv.load_dotenv()
-
-    trajectory_file = "/Users/zhugem/Desktop/DevAI/benchmark/trajectories/OpenHands/19_Time_Series_Forecasting_Seq2Seq_LSTM_Rossmann_ML.json"
+    load_dotenv()
+    trajectory_file = (
+        Path(os.getenv("PROJECT_DIR"))
+        + "/benchmark/trajectories/OpenHands/39_Drug_Response_Prediction_SVM_GDSC_ML.json"
+    )
     dev_text_search = DevTextRetrieve(trajectory_file)
 
     # Criteria for LLM summary
