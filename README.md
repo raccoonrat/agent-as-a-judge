@@ -2,15 +2,9 @@
     <h1 align="center">Agents Evaluate Agents</h1>
     <img src="assets/devai_logo.png" alt="DevAI Logo" width="150" height="150">
     <p align="center">
-        <a href="https://devai.tech"><b>Project</b></a> |  -->
-<!--         <a href="https://huggingface.co/DEVAI-benchmark"><b>🤗 Dataset</b></a> | 
+<!--         <a href="https://devai.tech"><b>Project</b></a> |  -->
+         <a href="https://huggingface.co/DEVAI-benchmark"><b>🤗 Dataset</b></a> | 
         <a href="https://arxiv.org/pdf/2410.10934"><b>📑 Paper</b></a> 
-<!-- <a href="https://arxiv.org/pdf/2410.10934">
-  <img src="https://img.shields.io/badge/Paper%20on%20Arxiv-1877F2?logoColor=FFE165&logo=arxiv&style=for-the-badge" alt="Paper on Arxiv">
-</a>
-<a href="https://huggingface.co/DEVAI-benchmark">
-  <img src="https://img.shields.io/badge/Benchmark%20score-1877F2?logoColor=FFE165&logo=huggingface&style=for-the-badge" alt="DevAI Benchmark">
-</a> -->
     </p>
 </div>
 
