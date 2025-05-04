@@ -1,5 +1,5 @@
 <div align="center">
-<img src="assets/aaaj_logo_v5.png" alt="aaaj Logo" width="850" />
+<img src="assets/aaaj_logo_v6.png" alt="aaaj Logo" width="850" />
 </div>
 
 
@@ -9,10 +9,20 @@
 
 
 > [!NOTE]
-> 🔥 **Accepted at ICML 2025!**
->
 > 📢 **Agent-as-a-Judge** is not only limited to the content of this repo, but a philosophy for judging agentic work and generating high-quality agentic datasets across domains.
 >
+> 🔥 **Accepted at ICML 2025!**
+>
+> 🔥 We build a Open-sourced DeepWiki (**OpenWiki**) which just add two codes in this repo.
+>
+
+> <div align="center" style="position: relative; width: 100%; overflow: hidden;">
+>     <div style="display: flex; transition: transform 0.5s ease;">
+>         <img src="assets/openwiki_1a.jpeg" alt="OpenWiki Architecture" style="min-width: 100%; object-fit: contain;" />
+>         <img src="assets/openwiki_1b.jpeg" alt="OpenWiki Component" style="min-width: 100%; object-fit: contain;" />
+>     </div>
+> </div>
+
 
 ## 🤠 Features
 
@@ -82,6 +92,13 @@ PYTHONPATH=. python scripts/run_aaaj.py \
 
 💡 There is an [example](assets/aaaj_sample.md) that shows the process of how **Agent-as-a-Judge** collects evidence for judging.
 
+#### 🔥🔥🔥 Usage C: **OpenWiki**
+
+
+
+```python
+python scripts/run_wiki.py https://github.com/metauto-ai/GPTSwarm
+```
 
 
 ## 🤗 DevAI Dataset 
