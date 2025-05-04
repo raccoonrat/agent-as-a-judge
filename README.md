@@ -9,11 +9,11 @@
 
 
 > [!NOTE]
-> 🔥 Can easily get Open-sourced DeepWiki (**OpenWiki**) by modifying this repo.
+> 🔥 We build a Open-sourced DeepWiki (**OpenWiki**) which just add two codes in this repo.
 >
 > <div align="center">
->     <img src="assets/openwiki_2.jpeg" alt="OpenWiki Architecture" width="50%" style="animation: slide 2s infinite alternate .5s;" />
->     <img src="assets/openwiki_3.jpeg" alt="OpenWiki Component" width="50%" style="animation: slide 2s infinite alternate 1s;" />
+>     <img src="assets/openwiki_2.jpeg" alt="OpenWiki Architecture" width="100%" style="animation: slide 2s infinite alternate .5s;" />
+>     <img src="assets/openwiki_3.jpeg" alt="OpenWiki Component" width="190%" style="animation: slide 2s infinite alternate 1s;" />
 > </div>
 >
 >
