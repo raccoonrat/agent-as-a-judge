@@ -22,22 +22,7 @@
 >     <button onclick="slideLeft()" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); z-index: 1;">←</button>
 >     <button onclick="slideRight()" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); z-index: 1;">→</button>
 > </div>
-> <script>
->     let currentSlide = 0;
->     const slides = document.querySelectorAll('.center div img');
->     function slideLeft() {
->         currentSlide = Math.max(0, currentSlide - 1);
->         updateSlide();
->     }
->     function slideRight() {
->         currentSlide = Math.min(slides.length - 1, currentSlide + 1);
->         updateSlide();
->     }
->     function updateSlide() {
->         const container = document.querySelector('.center div');
->         container.style.transform = `translateX(-${currentSlide * 100}%)`;
->     }
-> </script>
+
 
 
 ## 🤠 Features
