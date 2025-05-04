@@ -1,5 +1,5 @@
 <div align="center">
-<img src="assets/aaaj_logo_v6.png" alt="aaaj Logo" width="850" />
+<img src="assets/aaaj_logo_v7.png" alt="aaaj Logo" width="850" />
 </div>
 
 
