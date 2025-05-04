@@ -10,9 +10,9 @@
 
 
 > [!NOTE]
-> **Agent-as-a-Judge** is not only limited to the content of this repo, but a philosophy for judging agentic work and generating high-quality agentic datasets across domains.
+> 🔥 **Accepted at ICML 2025!**
 >
-> 🎉 **Accepted at ICML 2025!**
+> 📢 **Agent-as-a-Judge** is not only limited to the content of this repo, but a philosophy for judging agentic work and generating high-quality agentic datasets across domains.
 >
 
 ## 🤠 Features
