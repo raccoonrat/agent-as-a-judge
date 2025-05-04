@@ -1,5 +1,5 @@
 <div align="center">
-<img src="assets/aaaj_logo_v5.png" alt="aaaj Logo" width="850" />
+<img src="assets/aaaj_logo_v6.png" alt="aaaj Logo" width="850" />
 </div>
 
 
@@ -9,10 +9,20 @@
 
 
 > [!NOTE]
+> 🔥 Can easily get Open-sourced DeepWiki (**OpenWiki**) by modifying this repo.
+> 
 > 🔥 **Accepted at ICML 2025!**
 >
 > 📢 **Agent-as-a-Judge** is not only limited to the content of this repo, but a philosophy for judging agentic work and generating high-quality agentic datasets across domains.
 >
+
+<div align="center">
+    <img src="assets/openwiki_1.jpeg" alt="OpenWiki Overview" width="32%" />
+    <img src="assets/openwiki_2.jpeg" alt="OpenWiki Architecture" width="32%" />
+    <img src="assets/openwiki_3.jpeg" alt="OpenWiki Component" width="32%" />
+</div>
+
+OpenWiki automatically generates comprehensive documentation for any GitHub repository, providing clear visualization of code structure, component relationships, and usage examples. Perfect for understanding complex codebases at a glance!
 
 ## 🤠 Features
 
@@ -82,6 +92,13 @@ PYTHONPATH=. python scripts/run_aaaj.py \
 
 💡 There is an [example](assets/aaaj_sample.md) that shows the process of how **Agent-as-a-Judge** collects evidence for judging.
 
+#### 🔥🔥🔥 Usage C: **OpenWiki**
+
+
+
+```python
+python scripts/run_wiki.py https://github.com/metauto-ai/GPTSwarm
+```
 
 
 ## 🤗 DevAI Dataset 
