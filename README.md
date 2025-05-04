@@ -9,20 +9,36 @@
 
 
 > [!NOTE]
+> 📢 **Agent-as-a-Judge** is not only limited to the content of this repo, but a philosophy for judging agentic work and generating high-quality agentic datasets across domains.
+>
 > 🔥 We build a Open-sourced DeepWiki (**OpenWiki**) which just add two codes in this repo.
 >
-> <div align="center">
->     <img src="assets/openwiki_2.jpeg" alt="OpenWiki Architecture" width="100%" style="animation: slide 2s infinite alternate .5s;" />
->     <img src="assets/openwiki_3.jpeg" alt="OpenWiki Component" width="190%" style="animation: slide 2s infinite alternate 1s;" />
+
+> <div align="center" style="position: relative; width: 100%; overflow: hidden;">
+>     <div style="display: flex; transition: transform 0.5s ease;">
+>         <img src="assets/openwiki_2.jpeg" alt="OpenWiki Architecture" style="min-width: 100%; object-fit: contain;" />
+>         <img src="assets/openwiki_3.jpeg" alt="OpenWiki Component" style="min-width: 100%; object-fit: contain;" />
+>     </div>
+>     <button onclick="slideLeft()" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); z-index: 1;">←</button>
+>     <button onclick="slideRight()" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); z-index: 1;">→</button>
 > </div>
->
->
-> 🔥 **Accepted at ICML 2025!**
->
-> 📢 **Agent-as-a-Judge** is not only limited to the content of this repo, but a philosophy for judging agentic work and generating high-quality agentic datasets across domains.
+> <script>
+>     let currentSlide = 0;
+>     const slides = document.querySelectorAll('.center div img');
+>     function slideLeft() {
+>         currentSlide = Math.max(0, currentSlide - 1);
+>         updateSlide();
+>     }
+>     function slideRight() {
+>         currentSlide = Math.min(slides.length - 1, currentSlide + 1);
+>         updateSlide();
+>     }
+>     function updateSlide() {
+>         const container = document.querySelector('.center div');
+>         container.style.transform = `translateX(-${currentSlide * 100}%)`;
+>     }
+> </script>
 
-
-OpenWiki automatically generates comprehensive documentation for any GitHub repository, providing clear visualization of code structure, component relationships, and usage examples. Perfect for understanding complex codebases at a glance!
 
 ## 🤠 Features
 
