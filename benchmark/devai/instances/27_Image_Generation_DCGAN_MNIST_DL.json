@@ -46,7 +46,7 @@
                 0,
                 1
             ],
-            "criteria": "A hyperparameter search method to search parameters such as noise vector dimensions and learning rate is implemented in `src/train.py` to improve model performance.",
+            "criteria": "A hyperparemeter search method to search parameters such as noise vector dimensions and learning rate is implemented in `src/train.py` to improve model performance.",
             "category": "Machine Learning Method",
             "satisfied": null
         },

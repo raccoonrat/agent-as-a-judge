@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="assets/aaaj-logo.png" alt="aaaj Logo" width="850" />
+  <img src="assets/aaaj_logo.png" alt="aaaj Logo" width="850" />
   
   [![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
   [![Paper](https://img.shields.io/badge/Paper-Coming_Soon-red?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2410.10934)
@@ -8,10 +8,8 @@
 
 
 > [!NOTE]
-> Current evaluation techniques are often inadequate for advanced **agentic systems** due to their focus on final outcomes and labor-intensive manual reviews. To overcome this limitation, we introduce the **Agent-as-a-Judge** framework. 
+> Current evaluation techniques are often inadequate for advanced **agentic systems** due to their focus on final outcomes and labor-intensive manual reviews. To overcome this limitation, we introduce the **Agent-as-a-Judge** framework.
 >
-
-> [!NEWS]
 > Our paper has been accepted at ICML 2025! 🎉
 >
 
