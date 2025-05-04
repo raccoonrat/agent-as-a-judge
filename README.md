@@ -11,6 +11,8 @@
 > [!NOTE]
 > 📢 **Agent-as-a-Judge** is not only limited to the content of this repo, but a philosophy for judging agentic work and generating high-quality agentic datasets across domains.
 >
+> 🔥 **Accepted at ICML 2025!**
+>
 > 🔥 We build a Open-sourced DeepWiki (**OpenWiki**) which just add two codes in this repo.
 >
 
@@ -19,10 +21,7 @@
 >         <img src="assets/openwiki_2.jpeg" alt="OpenWiki Architecture" style="min-width: 100%; object-fit: contain;" />
 >         <img src="assets/openwiki_3.jpeg" alt="OpenWiki Component" style="min-width: 100%; object-fit: contain;" />
 >     </div>
->     <button onclick="slideLeft()" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); z-index: 1;">←</button>
->     <button onclick="slideRight()" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); z-index: 1;">→</button>
 > </div>
-
 
 
 ## 🤠 Features
