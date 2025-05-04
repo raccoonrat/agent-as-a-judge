@@ -92,7 +92,7 @@ PYTHONPATH=. python scripts/run_aaaj.py \
 
 💡 There is an [example](assets/aaaj_sample.md) that shows the process of how **Agent-as-a-Judge** collects evidence for judging.
 
-#### 🔥🔥🔥 Usage C: **OpenWiki**
+####  Usage C: **OpenWiki** 🔥🔥🔥
 
 
 
