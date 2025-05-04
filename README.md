@@ -13,7 +13,7 @@
 >
 > 🔥 **Accepted at ICML 2025!**
 >
-> 🔥 We build a Open-sourced DeepWiki (**OpenWiki**) which just add two codes in this repo.
+> 🔥 We build a Open-sourced DeepWiki (**OpenWiki**) which just add two codes in this repo (**following is a demo**).
 >
 
 > <div align="center" style="position: relative; width: 100%; overflow: hidden;">
