@@ -2,7 +2,7 @@
   <img src="assets/aaaj_logo.png" alt="aaaj Logo" width="850" />
   
   [![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
-  [![Paper](https://img.shields.io/badge/Paper-Coming_Soon-red?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2410.10934)
+  [![Paper](https://img.shields.io/badge/Paper-arXiv-red?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2410.10934)
   [![Dataset](https://img.shields.io/badge/Dataset-HuggingFace-yellow?style=flat-square&logo=huggingface)](https://huggingface.co/DEVAI-benchmark)
 </div>
 
