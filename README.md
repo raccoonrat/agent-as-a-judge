@@ -12,16 +12,10 @@
 > 🔥 Can easily get Open-sourced DeepWiki (**OpenWiki**) by modifying this repo.
 >
 > <div align="center">
->     <img src="assets/openwiki_2.jpeg" alt="OpenWiki Architecture" width="32%" style="animation: slide 2s infinite alternate .5s;" />
->     <img src="assets/openwiki_3.jpeg" alt="OpenWiki Component" width="32%" style="animation: slide 2s infinite alternate 1s;" />
+>     <img src="assets/openwiki_2.jpeg" alt="OpenWiki Architecture" width="50%" style="animation: slide 2s infinite alternate .5s;" />
+>     <img src="assets/openwiki_3.jpeg" alt="OpenWiki Component" width="50%" style="animation: slide 2s infinite alternate 1s;" />
 > </div>
 >
-> <style>
-> @keyframes slide {
->   from { transform: translateX(-10px); }
->   to { transform: translateX(10px); }
-> }
-> </style>
 >
 > 🔥 **Accepted at ICML 2025!**
 >
