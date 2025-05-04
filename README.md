@@ -1,15 +1,17 @@
 <div align="center">
-    <h1 align="center">Agents Evaluate Agents</h1>
-    <img src="assets/devai_logo.png" alt="DevAI Logo" width="150" height="150">
-    <p align="center">
-<!--         <a href="https://devai.tech"><b>Project</b></a> |  -->
-         <a href="https://huggingface.co/DEVAI-benchmark"><b>🤗 Dataset</b></a> | 
-        <a href="https://arxiv.org/pdf/2410.10934"><b>📑 Paper</b></a> 
-    </p>
+<img src="assets/aaaj_logo_v5.png" alt="aaaj Logo" width="850" />
 </div>
 
+
+[![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
+[![Paper](https://img.shields.io/badge/Paper-arXiv-red?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2410.10934)
+[![Dataset](https://img.shields.io/badge/Dataset-HuggingFace-yellow?style=flat-square&logo=huggingface)](https://huggingface.co/DEVAI-benchmark)
+
+
 > [!NOTE]
-> Current evaluation techniques are often inadequate for advanced **agentic systems** due to their focus on final outcomes and labor-intensive manual reviews. To overcome this limitation, we introduce the **Agent-as-a-Judge** framework. 
+> 🔥 **Accepted at ICML 2025!**
+>
+> 📢 **Agent-as-a-Judge** is not only limited to the content of this repo, but a philosophy for judging agentic work and generating high-quality agentic datasets across domains.
 >
 
 ## 🤠 Features
@@ -19,9 +21,6 @@ Agent-as-a-Judge offers two key advantages:
 - **Automated Evaluation**: Agent-as-a-Judge can evaluate tasks during or after execution, saving 97.72% of time and 97.64% of costs compared to human experts.
 - **Provide Reward Signals**: It provides continuous, step-by-step feedback that can be used as reward signals for further agentic training and improvement.
 
-<div align="center">
-    <img src="assets/demo.gif" alt="Demo GIF" style="width: 100%; max-width: 650px;">
-</div>
 <div align="center">
     <img src="assets/judge_first.png" alt="AaaJ" style="width: 95%; max-width: 650px;">
 </div>
@@ -46,6 +45,11 @@ poetry install
 Before running, rename `.env.sample` to `.env` and fill in the **required APIs and Settings** in the main repo folder to support LLM calling. The `LiteLLM` tool supports various LLMs.
 
 ### 3. run 
+
+
+<div align="center">
+    <img src="assets/demo.gif" alt="Demo GIF" style="width: 100%; max-width: 650px;">
+</div>
 
 > [!TIP]
 > See more comprehensive [usage scripts](scripts/README.md).
