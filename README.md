@@ -1,16 +1,18 @@
 <div align="center">
-  [![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
-  [![Paper](https://img.shields.io/badge/Paper-arXiv-red?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2410.10934)
-  [![Dataset](https://img.shields.io/badge/Dataset-HuggingFace-yellow?style=flat-square&logo=huggingface)](https://huggingface.co/DEVAI-benchmark)
-  <img src="assets/aaaj_logo_v2.png" alt="aaaj Logo" width="850" />
-  
+
+[![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
+[![Paper](https://img.shields.io/badge/Paper-arXiv-red?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2410.10934)
+[![Dataset](https://img.shields.io/badge/Dataset-HuggingFace-yellow?style=flat-square&logo=huggingface)](https://huggingface.co/DEVAI-benchmark)
+
+<img src="assets/aaaj_logo_v2.png" alt="aaaj Logo" width="850" />
+
 </div>
 
 
 > [!NOTE]
-> Current evaluation techniques are often inadequate for advanced **agentic systems** due to their focus on final outcomes and labor-intensive manual reviews. To overcome this limitation, we introduce the **Agent-as-a-Judge** framework.
+> **Agent-as-a-Judge** is not only limited to the content of this repo, but a philosophy for judging agentic work and generating high-quality agentic datasets across domains.
 >
-> **Accepted at ICML 2025! Agent-as-a-Judge is a philosophy for judging agentic work and generating high-quality agentic datasets across domains.**
+> 🎉 **Accepted at ICML 2025!**
 >
 
 ## 🤠 Features
