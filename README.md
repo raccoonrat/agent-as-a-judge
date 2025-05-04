@@ -1,7 +1,5 @@
 <div align="center">
-
 <img src="assets/aaaj_logo_v5.png" alt="aaaj Logo" width="850" />
-
 </div>
 
 
