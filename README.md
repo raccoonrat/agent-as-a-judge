@@ -1,15 +1,18 @@
 <div align="center">
-    <h1 align="center">Agents Evaluate Agents</h1>
-    <img src="assets/devai_logo.png" alt="DevAI Logo" width="150" height="150">
-    <p align="center">
-        <!-- <a href="https://devai.tech"><b>Project</b></a> |  -->
-        <a href="https://huggingface.co/DEVAI-benchmark"><b>🤗 Dataset</b></a> | 
-        <a href="https://arxiv.org/pdf/2410.10934"><b>Paper</b></a> 
-    </p>
+  <img src="assets/aaaj-logo.png" alt="aaaj Logo" width="850" />
+  
+  [![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
+  [![Paper](https://img.shields.io/badge/Paper-Coming_Soon-red?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2410.10934)
+  [![Dataset](https://img.shields.io/badge/Dataset-HuggingFace-yellow?style=flat-square&logo=huggingface)](https://huggingface.co/DEVAI-benchmark)
 </div>
+
 
 > [!NOTE]
 > Current evaluation techniques are often inadequate for advanced **agentic systems** due to their focus on final outcomes and labor-intensive manual reviews. To overcome this limitation, we introduce the **Agent-as-a-Judge** framework. 
+>
+
+> [!NEWS]
+> Our paper has been accepted at ICML 2025! 🎉
 >
 
 ## 🤠 Features
