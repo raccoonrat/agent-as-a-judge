@@ -18,8 +18,8 @@
 
 > <div align="center" style="position: relative; width: 100%; overflow: hidden;">
 >     <div style="display: flex; transition: transform 0.5s ease;">
->         <img src="assets/openwiki_2.jpeg" alt="OpenWiki Architecture" style="min-width: 100%; object-fit: contain;" />
->         <img src="assets/openwiki_3.jpeg" alt="OpenWiki Component" style="min-width: 100%; object-fit: contain;" />
+>         <img src="assets/openwiki_1a.jpeg" alt="OpenWiki Architecture" style="min-width: 100%; object-fit: contain;" />
+>         <img src="assets/openwiki_1b.jpeg" alt="OpenWiki Component" style="min-width: 100%; object-fit: contain;" />
 >     </div>
 > </div>
 
