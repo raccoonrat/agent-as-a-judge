@@ -10,17 +10,24 @@
 
 > [!NOTE]
 > 🔥 Can easily get Open-sourced DeepWiki (**OpenWiki**) by modifying this repo.
-> 
+>
+> <div align="center">
+>     <img src="assets/openwiki_1.jpeg" alt="OpenWiki Overview" width="32%" style="animation: slide 2s infinite alternate;" />
+>     <img src="assets/openwiki_2.jpeg" alt="OpenWiki Architecture" width="32%" style="animation: slide 2s infinite alternate .5s;" />
+>     <img src="assets/openwiki_3.jpeg" alt="OpenWiki Component" width="32%" style="animation: slide 2s infinite alternate 1s;" />
+> </div>
+>
+> <style>
+> @keyframes slide {
+>   from { transform: translateX(-10px); }
+>   to { transform: translateX(10px); }
+> }
+> </style>
+>
 > 🔥 **Accepted at ICML 2025!**
 >
 > 📢 **Agent-as-a-Judge** is not only limited to the content of this repo, but a philosophy for judging agentic work and generating high-quality agentic datasets across domains.
->
 
-<div align="center">
-    <img src="assets/openwiki_1.jpeg" alt="OpenWiki Overview" width="32%" />
-    <img src="assets/openwiki_2.jpeg" alt="OpenWiki Architecture" width="32%" />
-    <img src="assets/openwiki_3.jpeg" alt="OpenWiki Component" width="32%" />
-</div>
 
 OpenWiki automatically generates comprehensive documentation for any GitHub repository, providing clear visualization of code structure, component relationships, and usage examples. Perfect for understanding complex codebases at a glance!
 
