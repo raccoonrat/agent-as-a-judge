@@ -1134,12 +1134,8 @@ def generate_repo_documentation(repo_dir, output_dir, config, repo_url):
 
 def generate_html_page(documentation, output_dir, section=None):
     template_dir = Path(__file__).parent / "templates" / "html"
-    template_file = template_dir / "index.html"
     
-    try:
-        with open(template_file, "r") as f:
-            template = f.read()
-        
+    try:      
         import jinja2
         env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir))
         template = env.get_template("index.html")
