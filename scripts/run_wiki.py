@@ -18,11 +18,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 from agent_as_a_judge.agent import JudgeAgent
 from agent_as_a_judge.config import AgentConfig
-from agent_as_a_judge.module.ask import DevAsk
-from agent_as_a_judge.module.code_search import DevCodeSearch
-from agent_as_a_judge.module.read import DevRead
-from agent_as_a_judge.module.graph import DevGraph
-from agent_as_a_judge.llm.provider import LLM
 
 
 def download_github_repo(repo_url, target_dir):
