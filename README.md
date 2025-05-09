@@ -50,9 +50,18 @@ pip install poetry
 poetry install
 ```
 
+
+
 ### 2. set LLM&API
 
 Before running, rename `.env.sample` to `.env` and fill in the **required APIs and Settings** in the main repo folder to support LLM calling. The `LiteLLM` tool supports various LLMs.
+
+```bash
+cp .env.sample .env
+# and then set the .env, please change accordingly, for example: 
+# OPENAI_API_KEY="sk-***"
+# ...
+```
 
 ### 3. run 
 
