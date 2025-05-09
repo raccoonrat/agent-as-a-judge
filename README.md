@@ -51,7 +51,6 @@ poetry install
 ```
 
 
-
 ### 2. set LLM&API
 
 Before running, rename `.env.sample` to `.env` and fill in the **required APIs and Settings** in the main repo folder to support LLM calling. The `LiteLLM` tool supports various LLMs.

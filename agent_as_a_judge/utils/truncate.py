@@ -22,11 +22,6 @@ def truncate_string(
 
     info_string = str(info_string)
     
-    # Clean up model name - remove any comments and whitespace
-    if model and "#" in model:
-        model = model.split("#")[0].strip()
-    
-    # Use fallback for models not supported by tiktoken
     try:
         encoding = tiktoken.encoding_for_model(model)
     except KeyError:
