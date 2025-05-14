@@ -252,7 +252,7 @@ class DevRead:
             with open(file_path, "r", encoding="utf-8") as f:
                 data = markdown.markdown(f.read())
                 return (
-                    "".join(BeautifulSoup(data, "html.parser").findAll(string=True)),
+                    "".join(BeautifulSoup(data, "html.parser").find_all(string=True)),
                     None,
                 )
         except Exception as e:
