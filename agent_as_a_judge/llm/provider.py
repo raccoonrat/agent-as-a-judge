@@ -1,17 +1,9 @@
 import warnings
 import time
-from functools import partial
 import os
 from dotenv import load_dotenv
 import requests
 import yaml
-
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore")
-    try:
-        import litellm
-    except ImportError:
-        litellm = None
 
 __all__ = ["LLM"]
 
@@ -31,7 +23,7 @@ class LLM:
         llm_temperature=0.7,
         llm_top_p=0.9,
         custom_llm_provider=None,
-        provider="litellm",
+        provider="qwen",
         max_input_tokens=4096,
         max_output_tokens=2048,
         cost=None,
@@ -52,33 +44,13 @@ class LLM:
         self.retry_min_wait = retry_min_wait
         self.retry_max_wait = retry_max_wait
         self.custom_llm_provider = custom_llm_provider
-        self.provider = provider or custom_llm_provider or "litellm"
+        self.provider = provider or custom_llm_provider or "qwen"
         self.kwargs = kwargs
         self.model_info = None
         self._initialize_completion_function()
 
     def _initialize_completion_function(self):
-        if self.provider == "litellm":
-            if litellm is None:
-                raise ImportError("litellm is not installed.")
-            completion_func = partial(
-                litellm.completion,
-                model=self.model_name,
-                api_key=self.api_key,
-                base_url=self.base_url,
-                api_version=self.api_version,
-                custom_llm_provider=self.custom_llm_provider,
-                max_tokens=self.max_output_tokens,
-                timeout=self.llm_timeout,
-                temperature=self.llm_temperature,
-                top_p=self.llm_top_p,
-            )
-            def wrapper(*args, **kwargs):
-                resp = completion_func(*args, **kwargs)
-                message_back = resp["choices"][0]["message"]["content"]
-                return resp, message_back
-            self._completion = wrapper
-        elif self.provider == "qwen":
+        if self.provider == "qwen":
             def wrapper(messages, **kwargs):
                 url = self.base_url or "https://dashscope.aliyuncs.com/compatible-mode/v1"
                 headers = {"Authorization": f"Bearer {self.api_key}"}
@@ -95,7 +67,6 @@ class LLM:
                 resp = requests.post(url, headers=headers, json=data, timeout=self.llm_timeout)
                 resp.raise_for_status()
                 result = resp.json()
-                # 兼容 litellm 返回格式
                 message_back = result.get("output", {}).get("choices", [{}])[0].get("message", {}).get("content", "")
                 return result, message_back
             self._completion = wrapper
@@ -215,26 +186,13 @@ class LLM:
     def do_completion(self, *args, **kwargs):
         resp, msg = self._completion(*args, **kwargs)
         cur_cost, accumulated_cost = 0, 0
-        try:
-            cur_cost, accumulated_cost = self.post_completion(resp)
-        except Exception:
-            pass
         return resp, cur_cost, accumulated_cost
 
     def post_completion(self, response: dict):
-        # 仅 litellm 支持计费
-        if self.provider == "litellm" and litellm is not None:
-            try:
-                cost = litellm.completion_cost(completion_response=response)
-                if self.cost:
-                    self.cost.add_cost(cost)
-                return cost, self.cost.accumulated_cost
-            except Exception:
-                pass
         return 0.0, 0.0
 
     def get_token_count(self, messages):
-        return litellm.token_counter(model=self.model_name, messages=messages)
+        return 0
 
     def is_local(self):
         if self.base_url:
@@ -247,14 +205,6 @@ class LLM:
         return False
 
     def completion_cost(self, response):
-        if not self.is_local():
-            try:
-                cost = litellm.completion_cost(completion_response=response)
-                if self.cost:
-                    self.cost.add_cost(cost)
-                return cost
-            except Exception:
-                print("Cost calculation not supported for this model.")
         return 0.0
 
     def __str__(self):
@@ -325,7 +275,7 @@ class LLM:
                 api_key=api_key or os.getenv("OPENAI_API_KEY"),
                 base_url=base_url,
                 custom_llm_provider=custom_llm_provider,
-                provider=provider or os.getenv("LLM_PROVIDER", "litellm")
+                provider=provider or os.getenv("LLM_PROVIDER", "qwen")
             )
 
 
