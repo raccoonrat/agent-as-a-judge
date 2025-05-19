@@ -2,7 +2,6 @@ import warnings
 import time
 import os
 from dotenv import load_dotenv
-import requests
 import yaml
 
 __all__ = ["LLM"]
@@ -51,26 +50,27 @@ class LLM:
 
     def _initialize_completion_function(self):
         if self.provider == "qwen":
+            from openai import OpenAI
+            client = OpenAI(
+                api_key=self.api_key,
+                base_url=self.base_url or "https://dashscope.aliyuncs.com/compatible-mode/v1",
+            )
             def wrapper(messages, **kwargs):
-                url = self.base_url or "https://dashscope.aliyuncs.com/compatible-mode/v1"
-                headers = {"Authorization": f"Bearer {self.api_key}"}
-                data = {
-                    "model": self.model_name,
-                    "input": {"messages": messages},
-                    "parameters": {
-                        "temperature": self.llm_temperature,
-                        "top_p": self.llm_top_p,
-                        "max_tokens": self.max_output_tokens,
-                    }
-                }
-                data.update(kwargs)
-                resp = requests.post(url, headers=headers, json=data, timeout=self.llm_timeout)
-                resp.raise_for_status()
-                result = resp.json()
-                message_back = result.get("output", {}).get("choices", [{}])[0].get("message", {}).get("content", "")
+                completion = client.chat.completions.create(
+                    model=self.model_name,
+                    messages=messages,
+                    temperature=self.llm_temperature,
+                    top_p=self.llm_top_p,
+                    max_tokens=self.max_output_tokens,
+                    **kwargs
+                )
+                # openai兼容返回对象
+                result = completion.model_dump()
+                message_back = result["choices"][0]["message"]["content"]
                 return result, message_back
             self._completion = wrapper
         elif self.provider == "baichuan":
+            import requests
             def wrapper(messages, **kwargs):
                 url = self.base_url or "https://api.baichuan-ai.com/v1/chat/completions"
                 headers = {"Authorization": f"Bearer {self.api_key}"}
@@ -89,6 +89,7 @@ class LLM:
                 return result, message_back
             self._completion = wrapper
         elif self.provider == "glm":
+            import requests
             def wrapper(messages, **kwargs):
                 url = self.base_url or "https://open.bigmodel.cn/api/paas/v4/chat/completions"
                 headers = {"Authorization": f"Bearer {self.api_key}"}
@@ -107,6 +108,7 @@ class LLM:
                 return result, message_back
             self._completion = wrapper
         elif self.provider == "minimax":
+            import requests
             def wrapper(messages, **kwargs):
                 url = self.base_url or "https://api.minimax.chat/v1/text/chatcompletion"
                 headers = {"Authorization": f"Bearer {self.api_key}"}
@@ -125,6 +127,7 @@ class LLM:
                 return result, message_back
             self._completion = wrapper
         elif self.provider == "spark":
+            import requests
             def wrapper(messages, **kwargs):
                 url = self.base_url or "https://spark-api.xf-yun.com/v3.5/chat"
                 headers = {"Authorization": f"Bearer {self.api_key}"}
@@ -143,6 +146,7 @@ class LLM:
                 return result, message_back
             self._completion = wrapper
         elif self.provider == "custom_http":
+            import requests
             def wrapper(messages, **kwargs):
                 url = self.base_url
                 headers = {"Authorization": f"Bearer {self.api_key}"}
