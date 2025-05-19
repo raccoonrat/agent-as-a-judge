@@ -18,6 +18,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 from agent_as_a_judge.agent import JudgeAgent
 from agent_as_a_judge.config import AgentConfig
+from agent_as_a_judge.llm.provider import LLM
 
 
 def download_github_repo(repo_url, target_dir):
@@ -1344,6 +1345,16 @@ def get_repo_url_interactive():
         return get_repo_url_interactive()
     
     return repo_url
+
+
+def get_llm_for_wiki(args):
+    # 优先用 qwen-plus 和 DASHSCOPE_API_KEY
+    if args.model:
+        return LLM.from_config(model_name=args.model)
+    if os.getenv("DASHSCOPE_API_KEY"):
+        return LLM.from_config(model_name="qwen-plus", api_key=os.getenv("DASHSCOPE_API_KEY"))
+    # 回退到默认
+    return LLM.from_config()
 
 
 def main():
