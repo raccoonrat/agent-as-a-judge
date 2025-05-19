@@ -1130,23 +1130,21 @@ def generate_repo_documentation(repo_dir, output_dir, config, repo_url):
 
 def generate_html_page(documentation, output_dir, section=None):
     template_dir = Path(__file__).parent / "templates" / "html"
-    
+    if "components" not in documentation:
+        documentation["components"] = {}
     try:      
         import jinja2
         env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir))
         template = env.get_template("index.html")
-        
         html_content = template.render(
             documentation=documentation,
             architecture={"tech_stack": extract_tech_stack(documentation)},
             generated_at=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             section=section
         )
-        
         html_file = output_dir / f"{documentation['name']}_documentation.html"
         with open(html_file, "w") as f:
             f.write(html_content)
-            
         logging.info(f"Updated HTML documentation for section: {section}")
     except Exception as e:
         logging.error(f"Error in generate_html_page: {e}")

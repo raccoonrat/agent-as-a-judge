@@ -56,7 +56,6 @@ class LLM:
                 base_url=self.base_url or "https://dashscope.aliyuncs.com/compatible-mode/v1",
             )
             def wrapper(messages, **kwargs):
-                # 避免重复传递参数
                 for k in ["temperature", "top_p", "max_tokens"]:
                     kwargs.pop(k, None)
                 completion = client.chat.completions.create(
@@ -70,6 +69,25 @@ class LLM:
                 result = completion.model_dump()
                 message_back = result["choices"][0]["message"]["content"]
                 return result, message_back
+            self._completion = wrapper
+        elif self.provider == "local_llm":
+            from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
+            import torch
+            # 假设 self.model_name 是本地模型路径或huggingface模型名
+            tokenizer = AutoTokenizer.from_pretrained(self.model_name, trust_remote_code=True)
+            model = AutoModelForCausalLM.from_pretrained(self.model_name, trust_remote_code=True)
+            pipe = pipeline("text-generation", model=model, tokenizer=tokenizer, device=0 if torch.cuda.is_available() else -1)
+            def wrapper(messages, **kwargs):
+                # 只取最后一条user消息
+                prompt = messages[-1]["content"] if messages else ""
+                # 支持max_new_tokens等参数
+                gen_kwargs = dict(max_new_tokens=self.max_output_tokens, temperature=self.llm_temperature, top_p=self.llm_top_p)
+                gen_kwargs.update(kwargs)
+                outputs = pipe(prompt, **gen_kwargs)
+                content = outputs[0]["generated_text"] if outputs else ""
+                # 构造兼容格式
+                result = {"choices": [{"message": {"content": content}}]}
+                return result, content
             self._completion = wrapper
         elif self.provider == "baichuan":
             import requests

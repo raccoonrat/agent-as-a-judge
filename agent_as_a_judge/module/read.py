@@ -92,6 +92,7 @@ class DevRead:
             ".flv": self.read_video,
             ".webm": self.read_video,
             ".py": self.read_py,
+            ".go": self.read_go,
         }
 
     def read(
@@ -436,3 +437,11 @@ class DevRead:
                 ],
             }
         ]
+
+    def read_go(self, file_path, task=None):
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                content = f.read()
+            return content, None
+        except Exception as e:
+            return f"Error reading Go file: {e}", None
