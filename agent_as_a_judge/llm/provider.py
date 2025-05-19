@@ -56,6 +56,9 @@ class LLM:
                 base_url=self.base_url or "https://dashscope.aliyuncs.com/compatible-mode/v1",
             )
             def wrapper(messages, **kwargs):
+                # 避免重复传递参数
+                for k in ["temperature", "top_p", "max_tokens"]:
+                    kwargs.pop(k, None)
                 completion = client.chat.completions.create(
                     model=self.model_name,
                     messages=messages,
@@ -64,7 +67,6 @@ class LLM:
                     max_tokens=self.max_output_tokens,
                     **kwargs
                 )
-                # openai兼容返回对象
                 result = completion.model_dump()
                 message_back = result["choices"][0]["message"]["content"]
                 return result, message_back
@@ -72,6 +74,8 @@ class LLM:
         elif self.provider == "baichuan":
             import requests
             def wrapper(messages, **kwargs):
+                for k in ["temperature", "top_p", "max_tokens"]:
+                    kwargs.pop(k, None)
                 url = self.base_url or "https://api.baichuan-ai.com/v1/chat/completions"
                 headers = {"Authorization": f"Bearer {self.api_key}"}
                 data = {
@@ -91,6 +95,8 @@ class LLM:
         elif self.provider == "glm":
             import requests
             def wrapper(messages, **kwargs):
+                for k in ["temperature", "top_p", "max_tokens"]:
+                    kwargs.pop(k, None)
                 url = self.base_url or "https://open.bigmodel.cn/api/paas/v4/chat/completions"
                 headers = {"Authorization": f"Bearer {self.api_key}"}
                 data = {
@@ -110,6 +116,8 @@ class LLM:
         elif self.provider == "minimax":
             import requests
             def wrapper(messages, **kwargs):
+                for k in ["temperature", "top_p", "max_tokens"]:
+                    kwargs.pop(k, None)
                 url = self.base_url or "https://api.minimax.chat/v1/text/chatcompletion"
                 headers = {"Authorization": f"Bearer {self.api_key}"}
                 data = {
@@ -129,6 +137,8 @@ class LLM:
         elif self.provider == "spark":
             import requests
             def wrapper(messages, **kwargs):
+                for k in ["temperature", "top_p", "max_tokens"]:
+                    kwargs.pop(k, None)
                 url = self.base_url or "https://spark-api.xf-yun.com/v3.5/chat"
                 headers = {"Authorization": f"Bearer {self.api_key}"}
                 data = {
@@ -148,6 +158,8 @@ class LLM:
         elif self.provider == "custom_http":
             import requests
             def wrapper(messages, **kwargs):
+                for k in ["temperature", "top_p", "max_tokens"]:
+                    kwargs.pop(k, None)
                 url = self.base_url
                 headers = {"Authorization": f"Bearer {self.api_key}"}
                 data = {
