@@ -1,0 +1,442 @@
+{
+  "name": "sandboxai",
+  "url": "https://github.com/substratusai/sandboxai",
+  "repo_name": "sandboxai",
+  "org_name": "substratusai",
+  "last_indexed": "2025-05-19 16:12:57",
+  "sources": {
+    "overview": [],
+    "architecture": [
+      {
+        "file": "python/sandboxai/client/v1.py",
+        "lines": "5-54",
+        "github_url": "https://github.com/substratusai/sandboxai/blob/main/python/sandboxai/client/v1.py#L5-L54"
+      }
+    ],
+    "components": [
+      {
+        "file": "python/sandboxai/api/v1.py",
+        "lines": "12-61",
+        "github_url": "https://github.com/substratusai/sandboxai/blob/main/python/sandboxai/api/v1.py#L12-L61"
+      },
+      {
+        "file": "python/sandboxai/sandbox.py",
+        "lines": "11-60",
+        "github_url": "https://github.com/substratusai/sandboxai/blob/main/python/sandboxai/sandbox.py#L11-L60"
+      },
+      {
+        "file": "python/sandboxai/embedded.py",
+        "lines": "11-60",
+        "github_url": "https://github.com/substratusai/sandboxai/blob/main/python/sandboxai/embedded.py#L11-L60"
+      },
+      {
+        "file": "python/sandboxai/test/e2e/test_client_v1.py",
+        "lines": "6-55",
+        "github_url": "https://github.com/substratusai/sandboxai/blob/main/python/sandboxai/test/e2e/test_client_v1.py#L6-L55"
+      },
+      {
+        "file": "python/examples/basic.py",
+        "lines": "1-4",
+        "github_url": "https://github.com/substratusai/sandboxai/blob/main/python/examples/basic.py#L1-L4"
+      },
+      {
+        "file": "python/examples/basic-with-options.py",
+        "lines": "1-5",
+        "github_url": "https://github.com/substratusai/sandboxai/blob/main/python/examples/basic-with-options.py#L1-L5"
+      },
+      {
+        "file": "python/examples/swarm-agent.py",
+        "lines": "1-45",
+        "github_url": "https://github.com/substratusai/sandboxai/blob/main/python/examples/swarm-agent.py#L1-L45"
+      },
+      {
+        "file": "python/sandboxai/experimental/crewai.py",
+        "lines": "1-42",
+        "github_url": "https://github.com/substratusai/sandboxai/blob/main/python/sandboxai/experimental/crewai.py#L1-L42"
+      },
+      {
+        "file": "python/boxd/main.py",
+        "lines": "8-57",
+        "github_url": "https://github.com/substratusai/sandboxai/blob/main/python/boxd/main.py#L8-L57"
+      }
+    ],
+    "installation": [],
+    "usage": [
+      {
+        "file": "python/examples/basic-with-logging.py",
+        "lines": "1-7",
+        "github_url": "https://github.com/substratusai/sandboxai/blob/main/python/examples/basic-with-logging.py#L1-L7"
+      }
+    ]
+  },
+  "advanced_topics": "# Advanced Topics for the SandboxAI Repository\n\nBelow is a detailed documentation of advanced topics relevant to the `SandboxAI` repository. This content is aimed at experienced users who wish to deepen their understanding of the system.\n\n---\n\n## Performance Optimization Strategies\n\nThe performance of the `SandboxAI` system can be optimized through various strategies, leveraging both code-level and architectural improvements.\n\n### Code-Level Optimizations\n- **Efficient Data Structures**: Use Go's slices and maps judiciously in the `go/sandboxaid/client/docker` package to reduce memory overhead.\n- **Concurrency**: Utilize Go's goroutines in `go/sandboxaid/handler/handler.go` to handle multiple requests concurrently, improving throughput.\n- **Profiling Tools**: Use Go's `pprof` tool to identify bottlenecks in the `sandboxaid` service.\n\ngo\n// Example: Using Goroutines for Concurrent Handling\nfunc HandleRequests(reqs []Request) {\n    var wg sync.WaitGroup\n    for _, req := range reqs {\n        wg.Add(1)\n        go func(r Request) {\n            defer wg.Done()\n            processRequest(r)\n        }(req)\n    }\n    wg.Wait()\n}\n\n### Architectural Optimizations\n- **Caching**: Implement caching mechanisms in the API layer (`api/v1.yaml`) to store frequently accessed data, reducing database load.\n- **Optimized Docker Images**: Minimize the size of the Docker image defined in `box.Dockerfile` by using multi-stage builds.\n\ndockerfile\n# Example: Multi-Stage Build\nFROM golang:1.20 AS builder\nWORKDIR /app\nCOPY go.mod go.sum ./\nRUN go mod download\nCOPY . .\nRUN CGO_ENABLED=0 GOOS=linux go build -o sandboxaid .\n\nFROM scratch\nCOPY --from=builder /app/sandboxaid /sandboxaid\nENTRYPOINT [\"/sandboxaid\"]\n\n---\n\n## Extending or Customizing the System\n\nThe `SandboxAI` system is designed to be extensible, allowing developers to customize its behavior for specific use cases.\n\n### Adding New Endpoints\nExtend the API by defining new endpoints in `go/api/v1/gen.yaml` and regenerating the types with `go/api/v1/generate.go`.\n\nyaml\n# Example: Adding a New Endpoint\npaths:\n  /v1/new-endpoint:\n    post:\n      summary: \"Custom endpoint for new functionality\"\n      requestBody:\n        required: true\n        content:\n          application/json:\n            schema:\n              type: object\n              properties:\n                param1:\n                  type: string\n\n### Customizing Behavior\nModify the behavior of the `sandboxaid` service by implementing custom handlers in `go/sandboxaid/handler/handler.go`.\n\ngo\n// Example: Custom Handler\nfunc CustomHandler(w http.ResponseWriter, r *http.Request) {\n    // Custom logic here\n    w.Write([]byte(\"Custom response\"))\n}\n\n---\n\n## Internal Architecture Details\n\nThe `SandboxAI` system follows a modular architecture, separating concerns into distinct components.\n\n### Key Components\n1. **API Layer**: Defined in `go/api/v1`, this layer exposes RESTful endpoints for interacting with the system.\n2. **Client Libraries**: Located in `go/client/v1` and `python/sandboxai/client/v1.py`, these libraries allow clients to interact with the API.\n3. **Core Service**: Implemented in `go/sandboxaid`, this service handles core business logic and communicates with the Docker client.\n4. **Test Suite**: Comprehensive test cases are located in `test/e2e` and `go/test/e2e`, ensuring robustness.\n\n### Communication Flow\n- The client sends a request to the API.\n- The API forwards the request to the `sandboxaid` service.\n- The service processes the request, optionally invoking Docker operations.\n- The result is returned through the API to the client.\n\n---\n\n## Complex Algorithms or Techniques Used\n\nThe repository employs several advanced techniques to ensure efficiency and reliability.\n\n### Algorithm: Parallel Execution\nThe `run_ipython_cell.json` and `run_shell_command.json` test cases demonstrate parallel execution of tasks using goroutines or Python's `concurrent.futures`.\n\n# Example: Parallel Execution in Python\nfrom concurrent.futures import ThreadPoolExecutor\n\ndef execute_task(task):\n    # Task logic\n    return task.result\n\nwith ThreadPoolExecutor() as executor:\n    futures = [executor.submit(execute_task, task) for task in tasks]\n    results = [future.result() for future in futures]\n\n### Technique: Code Generation\nThe `go/api/v1/types.gen.go` file is generated from `gen.yaml`, automating boilerplate code and reducing errors.\n\n---\n\n## Integration with Other Systems\n\nThe `SandboxAI` system can be integrated with external systems through APIs and plugins.\n\n### Example: Integrating with a Logging System\nAdd logging middleware in `go/sandboxaid/handler/handler.go` to integrate with an external logging service.\n\ngo\n// Example: Middleware for Logging\nfunc LoggingMiddleware(next http.Handler) http.Handler {\n    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {\n        log.Printf(\"Received request: %s %s\", r.Method, r.URL.Path)\n        next.ServeHTTP(w, r)\n    })\n}\n\n### Plugin Architecture\nDevelopers can create plugins by extending the `go/sandboxaid/client/interface.go` interface.\n\ngo\n// Example: Plugin Interface\ntype Plugin interface {\n    Execute(input string) string\n}\n\ntype MyPlugin struct{}\n\nfunc (p MyPlugin) Execute(input string) string {\n    return fmt.Sprintf(\"Processed: %s\", input)\n}\n\n---\n\n## Scaling Considerations\n\nTo scale the `SandboxAI` system effectively, consider the following strategies:\n\n### Horizontal Scaling\nDeploy multiple instances of the `sandboxaid` service behind a load balancer.\n\n# Example: Kubernetes Deployment\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: sandboxaid\nspec:\n  replicas: 3\n  selector:\n    matchLabels:\n      app: sandboxaid\n  template:\n    metadata:\n      labels:\n        app: sandboxaid\n    spec:\n      containers:\n      - name: sandboxaid\n        image: myrepo/sandboxaid:latest\n\n### Database Sharding\nIf the system relies on a database, implement sharding to distribute the load across multiple nodes.\n\n---\n\n## Security Considerations\n\nSecurity is critical for the `SandboxAI` system, especially when executing untrusted code.\n\n### Input Validation\nValidate all inputs at the API level to prevent injection attacks.\n\ngo\n// Example: Input Validation\nfunc ValidateInput(input string) error {\n    if strings.ContainsAny(input, \";|&\") {\n        return fmt.Errorf(\"Invalid characters in input\")\n    }\n    return nil\n}\n\n### Container Isolation\nEnsure that Docker containers used by `sandboxaid` are properly isolated.\n\ndockerfile\n# Example: Secure Docker Configuration\nRUN useradd -m sandboxuser\nUSER sandboxuser\n\n### Secrets Management\nUse environment variables or a secrets manager to handle sensitive information.\n\n# Example: Environment Variables\nexport API_KEY=\"secure-key\"\n\n---\n\nThis documentation provides a comprehensive overview of advanced topics for the `SandboxAI` repository, enabling experienced users to optimize, extend, and secure the system effectively.",
+  "advanced_topics_sections": [
+    {
+      "id": "performance-optimization-strategies",
+      "title": "Performance Optimization Strategies",
+      "content": "The performance of the `SandboxAI` system can be optimized through various strategies, leveraging both code-level and architectural improvements."
+    },
+    {
+      "id": "architectural-optimizations",
+      "title": "Architectural Optimizations",
+      "content": "- **Caching**: Implement caching mechanisms in the API layer (`api/v1.yaml`) to store frequently accessed data, reducing database load.\n- **Optimized Docker Images**: Minimize the size of the Docker image defined in `box.Dockerfile` by using multi-stage builds.\n\ndockerfile\n# Example: Multi-Stage Build\nFROM golang:1.20 AS builder\nWORKDIR /app\nCOPY go.mod go.sum ./\nRUN go mod download\nCOPY . .\nRUN CGO_ENABLED=0 GOOS=linux go build -o sandboxaid .\n\nFROM scratch\nCOPY --from=builder /app/sandboxaid /sandboxaid\nENTRYPOINT [\"/sandboxaid\"]\n\n---"
+    },
+    {
+      "id": "extending-or-customizing-the-system",
+      "title": "Extending or Customizing the System",
+      "content": "The `SandboxAI` system is designed to be extensible, allowing developers to customize its behavior for specific use cases."
+    },
+    {
+      "id": "adding-new-endpoints",
+      "title": "Adding New Endpoints",
+      "content": "Extend the API by defining new endpoints in `go/api/v1/gen.yaml` and regenerating the types with `go/api/v1/generate.go`.\n\nyaml\n# Example: Adding a New Endpoint\npaths:\n  /v1/new-endpoint:\n    post:\n      summary: \"Custom endpoint for new functionality\"\n      requestBody:\n        required: true\n        content:\n          application/json:\n            schema:\n              type: object\n              properties:\n                param1:\n                  type: string"
+    },
+    {
+      "id": "customizing-behavior",
+      "title": "Customizing Behavior",
+      "content": "Modify the behavior of the `sandboxaid` service by implementing custom handlers in `go/sandboxaid/handler/handler.go`.\n\ngo\n// Example: Custom Handler\nfunc CustomHandler(w http.ResponseWriter, r *http.Request) {\n    // Custom logic here\n    w.Write([]byte(\"Custom response\"))\n}\n\n---"
+    },
+    {
+      "id": "internal-architecture-details",
+      "title": "Internal Architecture Details",
+      "content": "The `SandboxAI` system follows a modular architecture, separating concerns into distinct components."
+    },
+    {
+      "id": "key-components",
+      "title": "Key Components",
+      "content": "1. **API Layer**: Defined in `go/api/v1`, this layer exposes RESTful endpoints for interacting with the system.\n2. **Client Libraries**: Located in `go/client/v1` and `python/sandboxai/client/v1.py`, these libraries allow clients to interact with the API.\n3. **Core Service**: Implemented in `go/sandboxaid`, this service handles core business logic and communicates with the Docker client.\n4. **Test Suite**: Comprehensive test cases are located in `test/e2e` and `go/test/e2e`, ensuring robustness."
+    },
+    {
+      "id": "communication-flow",
+      "title": "Communication Flow",
+      "content": "- The client sends a request to the API.\n- The API forwards the request to the `sandboxaid` service.\n- The service processes the request, optionally invoking Docker operations.\n- The result is returned through the API to the client.\n\n---"
+    },
+    {
+      "id": "complex-algorithms-or-techniques-used",
+      "title": "Complex Algorithms or Techniques Used",
+      "content": "The repository employs several advanced techniques to ensure efficiency and reliability."
+    },
+    {
+      "id": "integration-with-other-systems",
+      "title": "Integration with Other Systems",
+      "content": "The `SandboxAI` system can be integrated with external systems through APIs and plugins."
+    },
+    {
+      "id": "plugin-architecture",
+      "title": "Plugin Architecture",
+      "content": "Developers can create plugins by extending the `go/sandboxaid/client/interface.go` interface.\n\ngo\n// Example: Plugin Interface\ntype Plugin interface {\n    Execute(input string) string\n}\n\ntype MyPlugin struct{}\n\nfunc (p MyPlugin) Execute(input string) string {\n    return fmt.Sprintf(\"Processed: %s\", input)\n}\n\n---"
+    },
+    {
+      "id": "scaling-considerations",
+      "title": "Scaling Considerations",
+      "content": "To scale the `SandboxAI` system effectively, consider the following strategies:"
+    },
+    {
+      "id": "horizontal-scaling",
+      "title": "Horizontal Scaling",
+      "content": "Deploy multiple instances of the `sandboxaid` service behind a load balancer.\n\n# Example: Kubernetes Deployment\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: sandboxaid\nspec:\n  replicas: 3\n  selector:\n    matchLabels:\n      app: sandboxaid\n  template:\n    metadata:\n      labels:\n        app: sandboxaid\n    spec:\n      containers:\n      - name: sandboxaid\n        image: myrepo/sandboxaid:latest"
+    },
+    {
+      "id": "database-sharding",
+      "title": "Database Sharding",
+      "content": "If the system relies on a database, implement sharding to distribute the load across multiple nodes.\n\n---"
+    },
+    {
+      "id": "security-considerations",
+      "title": "Security Considerations",
+      "content": "Security is critical for the `SandboxAI` system, especially when executing untrusted code."
+    },
+    {
+      "id": "input-validation",
+      "title": "Input Validation",
+      "content": "Validate all inputs at the API level to prevent injection attacks.\n\ngo\n// Example: Input Validation\nfunc ValidateInput(input string) error {\n    if strings.ContainsAny(input, \";|&\") {\n        return fmt.Errorf(\"Invalid characters in input\")\n    }\n    return nil\n}"
+    },
+    {
+      "id": "container-isolation",
+      "title": "Container Isolation",
+      "content": "Ensure that Docker containers used by `sandboxaid` are properly isolated.\n\ndockerfile\n# Example: Secure Docker Configuration\nRUN useradd -m sandboxuser\nUSER sandboxuser"
+    },
+    {
+      "id": "secrets-management",
+      "title": "Secrets Management",
+      "content": "Use environment variables or a secrets manager to handle sensitive information.\n\n# Example: Environment Variables\nexport API_KEY=\"secure-key\"\n\n---\n\nThis documentation provides a comprehensive overview of advanced topics for the `SandboxAI` repository, enabling experienced users to optimize, extend, and secure the system effectively."
+    }
+  ],
+  "examples": "# Comprehensive Examples and Tutorials for the SandboxAI Repository\n\nThis document provides a set of comprehensive examples and tutorials for the **SandboxAI** repository. The aim is to guide users from absolute beginners to advanced developers in understanding and leveraging the core functionalities of this project.\n\n---\n\n## Getting Started Tutorial for Absolute Beginners\n\n### Overview\nThis tutorial introduces new users to the SandboxAI repository, its structure, and how to set it up locally. By the end of this tutorial, you will have a working development environment ready for experimentation.\n\n### Prerequisites\n- Basic knowledge of Python and Go.\n- Docker installed on your system.\n\n### Step-by-Step Instructions\n\n#### Step 1: Clone the Repository\n\ngit clone https://github.com/raccoonrat/agent-as-a-judge.git\ncd agent-as-a-judge/repo_docs/sandboxai\n\n#### Step 2: Build the Docker Image\nThe `box.Dockerfile` defines the environment for running the sandbox. Build it using:\n\ndocker build -t sandboxai-box -f box.Dockerfile .\n\n#### Step 3: Run the API Server\nStart the API server using the Makefile:\n\nmake run-api\n\nThis command uses the Go-based API server located in `go/api/v1`.\n\n#### Step 4: Test the Setup\nUse the Python client to test the connection:\n\nfrom sandboxai.client.v1 import Client\n\nclient = Client(base_url=\"http://localhost:8080\")\nresponse = client.ping()\nprint(response)\n\n**Expected Output:**\nplaintext\n{'status': 'ok', 'message': 'Pong!'}\n\n---\n\n## Basic Examples Showing Core Functionality\n\n### Example 1: Running a Shell Command\nThis example demonstrates how to execute a shell command within the sandbox.\n\n#### Code\n\nfrom sandboxai.client.v1 import Client\n\nclient = Client(base_url=\"http://localhost:8080\")\nresult = client.run_shell_command(\"echo Hello, SandboxAI!\")\nprint(result)\n\n#### Explanation\n- The `run_shell_command` method sends a request to the API server.\n- The server executes the command inside a secure Docker container and returns the output.\n\n#### Expected Output\nplaintext\n{'output': 'Hello, SandboxAI!', 'error': '', 'return_code': 0}\n\n---\n\n### Example 2: Evaluating an IPython Cell\nThis example shows how to evaluate a Python code snippet using the sandbox.\n\n#### Code\n\nfrom sandboxai.client.v1 import Client\n\nclient = Client(base_url=\"http://localhost:8080\")\ncode = \"x = 5; y = 10; x + y\"\nresult = client.run_ipython_cell(code)\nprint(result)\n\n#### Explanation\n- The `run_ipython_cell` method evaluates the provided Python code.\n- This is useful for executing small scripts or testing code snippets securely.\n\n#### Expected Output\nplaintext\n{'output': '15', 'error': '', 'return_code': 0}\n\n---\n\n## Advanced Examples Demonstrating Complex Use Cases\n\n### Example 1: Integrating with a Custom Docker Image\nThis example demonstrates how to use a custom Docker image for the sandbox.\n\n#### Steps\n1. Create a custom Dockerfile:\n   Dockerfile\n   FROM python:3.9-slim\n   RUN pip install numpy pandas\n   \n\n2. Update the configuration in `sandbox.json`:\n   \n   {\n       \"image\": \"custom-image\",\n       \"command\": \"python -c 'import numpy; print(numpy.__version__)'\"\n   }\n   \n\n3. Build and test:\n   \n   docker build -t custom-image -f custom.Dockerfile .\n   python examples/basic.py\n   \n\n#### Expected Output\nplaintext\n{'output': '1.21.0', 'error': '', 'return_code': 0}\n\n---\n\n### Example 2: Handling Large Files\nThis example demonstrates how to upload and process large files within the sandbox.\n\n#### Code\n\nfrom sandboxai.client.v1 import Client\n\nclient = Client(base_url=\"http://localhost:8080\")\nfile_path = \"large_file.txt\"\nwith open(file_path, \"rb\") as f:\n    result = client.upload_and_process(f)\nprint(result)\n\n#### Explanation\n- The `upload_and_process` method handles file uploads and processes them securely.\n- This is useful for applications like data analysis or machine learning.\n\n#### Expected Output\nplaintext\n{'output': 'File processed successfully.', 'error': '', 'return_code': 0}\n\n---\n\n## Common Integration Scenarios\n\n### Scenario 1: Integration with a Web Application\nThis scenario demonstrates how to integrate SandboxAI with a Flask web application.\n\n#### Code\n\nfrom flask import Flask, request\nfrom sandboxai.client.v1 import Client\n\napp = Flask(__name__)\nclient = Client(base_url=\"http://localhost:8080\")\n\n@app.route(\"/execute\", methods=[\"POST\"])\ndef execute():\n    code = request.json.get(\"code\")\n    result = client.run_ipython_cell(code)\n    return result\n\nif __name__ == \"__main__\":\n    app.run(port=5000)\n\n#### Explanation\n- A Flask route `/execute` accepts JSON payloads containing Python code.\n- The code is executed securely using the sandbox.\n\n#### Expected Output\nWhen sending a POST request with `{\"code\": \"2 + 2\"}`:\nplaintext\n{'output': '4', 'error': '', 'return_code': 0}\n\n---\n\n## End-to-End Example: Building a Code Evaluation Platform\n\n### Overview\nIn this example, we will build a simple platform where users can submit Python code snippets, and the system evaluates them securely.\n\n### Steps\n\n#### Step 1: Set Up the Backend\nUse the Go-based API server (`go/api/v1`) to handle incoming requests.\n\n#### Step 2: Develop the Frontend\nCreate a basic HTML form for submitting code:\nhtml\n<form action=\"/evaluate\" method=\"post\">\n    <textarea name=\"code\"></textarea>\n    <button type=\"submit\">Evaluate</button>\n</form>\n\n#### Step 3: Handle Requests\nWrite a Python script to process the form data:\n\nfrom flask import Flask, request\nfrom sandboxai.client.v1 import Client\n\napp = Flask(__name__)\nclient = Client(base_url=\"http://localhost:8080\")\n\n@app.route(\"/evaluate\", methods=[\"POST\"])\ndef evaluate():\n    code = request.form.get(\"code\")\n    result = client.run_ipython_cell(code)\n    return f\"<pre>{result['output']}</pre>\"\n\nif __name__ == \"__main__\":\n    app.run(port=5000)\n\n#### Expected Output\nWhen submitting `2 + 2`:\nplaintext\n4\n\n---\n\n## Conclusion\n\nThis document provides a comprehensive set of examples and tutorials for the SandboxAI repository. From getting started to building real-world applications, these resources should help users effectively utilize the project's capabilities. Feel free to explore and extend these examples to suit your specific needs!",
+  "code_examples": [
+    {
+      "title": "Explanation of Groupings Example 1",
+      "description": "Example usage of the Explanation of Groupings component",
+      "code": "from python.sandboxai.client.v1 import GroupingManager\n\nmanager = GroupingManager()\nmanager.add_grouping(\n    group_name=\"new_feature_tests\",\n    config={\n        \"type\": \"test\",\n        \"files\": [\"new_test_case.json\"]\n    }\n)"
+    },
+    {
+      "title": "Explanation of Groupings Example 2",
+      "description": "Example usage of the Explanation of Groupings component",
+      "code": "from python.sandboxai.client.v1 import GroupingManager\n\nmanager = GroupingManager()\nif not manager.validate_groupings():\n    print(\"Some groupings are invalid. Please check your configuration.\")"
+    },
+    {
+      "title": "Explanation of Groupings Example 3",
+      "description": "Example usage of the Explanation of Groupings component",
+      "code": "from python.sandboxai.client.v1 import GroupingManager\n\nmanager = GroupingManager()\nfor group in manager.get_groupings():\n    print(f\"Name: {group['name']}, Type: {group['type']}\")"
+    },
+    {
+      "title": "Usage Example 1",
+      "description": "Example demonstrating key functionality of the sandboxai library.",
+      "code": "git clone https://github.com/raccoonrat/agent-as-a-judge.git\ncd agent-as-a-judge/repo_docs/sandboxai"
+    },
+    {
+      "title": "Usage Example 2",
+      "description": "Example demonstrating key functionality of the sandboxai library.",
+      "code": "python python/examples/basic.py"
+    },
+    {
+      "title": "Usage Example 3",
+      "description": "Example demonstrating key functionality of the sandboxai library.",
+      "code": "from sandboxai.client.v1 import Client\n\nclient = Client(api_key=\"your_api_key\")\nresponse = client.run_shell_command(\"echo Hello, SandboxAI!\")\nprint(response.output)"
+    },
+    {
+      "title": "Usage Example 4",
+      "description": "Example demonstrating key functionality of the sandboxai library.",
+      "code": "docker build -t sandboxai-box -f box.Dockerfile ."
+    },
+    {
+      "title": "Usage Example 5",
+      "description": "Example demonstrating key functionality of the sandboxai library.",
+      "code": "make start"
+    },
+    {
+      "title": "Usage Example 6",
+      "description": "Example demonstrating key functionality of the sandboxai library.",
+      "code": "from sandboxai.client.v1 import Client\n\nclient = Client(api_key=\"your_api_key\")\ncode = \"result = 2 + 2; result\"\nresponse = client.run_ipython_cell(code)\nprint(response.output)  # Output: 4"
+    },
+    {
+      "title": "Usage Example 7",
+      "description": "Example demonstrating key functionality of the sandboxai library.",
+      "code": "from sandboxai.client.v1 import Client\n\nclient = Client(api_key=\"your_api_key\", enable_logging=True)\nresponse = client.run_shell_command(\"ls -la\")\nprint(response.logs)  # Detailed logs of the command execution"
+    },
+    {
+      "title": "Usage Example 8",
+      "description": "Example demonstrating key functionality of the sandboxai library.",
+      "code": "from sandboxai.client.v1 import Client, SandboxError\n\ntry:\n    client = Client(api_key=\"your_api_key\")\n    response = client.run_shell_command(\"invalid-command\")\nexcept SandboxError as e:\n    print(f\"Error occurred: {e}\")"
+    },
+    {
+      "title": "Usage Example 9",
+      "description": "Example demonstrating key functionality of the sandboxai library.",
+      "code": "docker build -t custom-sandboxai-box -f box.Dockerfile ."
+    },
+    {
+      "title": "Usage Example 10",
+      "description": "Example demonstrating key functionality of the sandboxai library.",
+      "code": "from sandboxai.client.v1 import Client\nimport concurrent.futures\n\ndef execute_task(task):\n    client = Client(api_key=\"your_api_key\")\n    return client.run_shell_command(task).output\n\ntasks = [\"echo Task 1\", \"echo Task 2\", \"echo Task 3\"]\n\nwith concurrent.futures.ThreadPoolExecutor() as executor:\n    results = list(executor.map(execute_task, tasks))\nprint(results)"
+    },
+    {
+      "title": "Advanced Example 1",
+      "description": "Example demonstrating key functionality of the sandboxai library.",
+      "code": "# Example: Parallel Execution in Python\nfrom concurrent.futures import ThreadPoolExecutor\n\ndef execute_task(task):\n    # Task logic\n    return task.result\n\nwith ThreadPoolExecutor() as executor:\n    futures = [executor.submit(execute_task, task) for task in tasks]\n    results = [future.result() for future in futures]"
+    },
+    {
+      "title": "Advanced Example 2",
+      "description": "Example demonstrating key functionality of the sandboxai library.",
+      "code": "# Example: Kubernetes Deployment\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: sandboxaid\nspec:\n  replicas: 3\n  selector:\n    matchLabels:\n      app: sandboxaid\n  template:\n    metadata:\n      labels:\n        app: sandboxaid\n    spec:\n      containers:\n      - name: sandboxaid\n        image: myrepo/sandboxaid:latest"
+    },
+    {
+      "title": "Advanced Example 3",
+      "description": "Example demonstrating key functionality of the sandboxai library.",
+      "code": "# Example: Environment Variables\nexport API_KEY=\"secure-key\""
+    },
+    {
+      "title": "Step 1: Clone the Repository",
+      "description": "Example demonstrating Step 1: Clone the Repository",
+      "code": "git clone https://github.com/raccoonrat/agent-as-a-judge.git\ncd agent-as-a-judge/repo_docs/sandboxai"
+    },
+    {
+      "title": "Code",
+      "description": "Example demonstrating key functionality of the sandboxai library.",
+      "code": "docker build -t sandboxai-box -f box.Dockerfile ."
+    },
+    {
+      "title": "Expected Output",
+      "description": "Example demonstrating key functionality of the sandboxai library.",
+      "code": "make run-api"
+    },
+    {
+      "title": "Code",
+      "description": "Example demonstrating key functionality of the sandboxai library.",
+      "code": "from sandboxai.client.v1 import Client\n\nclient = Client(base_url=\"http://localhost:8080\")\nresponse = client.ping()\nprint(response)"
+    },
+    {
+      "title": "Expected Output",
+      "description": "Example demonstrating key functionality of the sandboxai library.",
+      "code": "from sandboxai.client.v1 import Client\n\nclient = Client(base_url=\"http://localhost:8080\")\nresult = client.run_shell_command(\"echo Hello, SandboxAI!\")\nprint(result)"
+    },
+    {
+      "title": "Expected Output",
+      "description": "Example demonstrating key functionality of the sandboxai library.",
+      "code": "from sandboxai.client.v1 import Client\n\nclient = Client(base_url=\"http://localhost:8080\")\ncode = \"x = 5; y = 10; x + y\"\nresult = client.run_ipython_cell(code)\nprint(result)"
+    },
+    {
+      "title": "Code",
+      "description": "Example demonstrating key functionality of the sandboxai library.",
+      "code": "docker build -t custom-image -f custom.Dockerfile .\n   python examples/basic.py"
+    },
+    {
+      "title": "Expected Output",
+      "description": "Example demonstrating key functionality of the sandboxai library.",
+      "code": "from sandboxai.client.v1 import Client\n\nclient = Client(base_url=\"http://localhost:8080\")\nfile_path = \"large_file.txt\"\nwith open(file_path, \"rb\") as f:\n    result = client.upload_and_process(f)\nprint(result)"
+    },
+    {
+      "title": "Code",
+      "description": "Example demonstrating key functionality of the sandboxai library.",
+      "code": "from flask import Flask, request\nfrom sandboxai.client.v1 import Client\n\napp = Flask(__name__)\nclient = Client(base_url=\"http://localhost:8080\")\n\n@app.route(\"/execute\", methods=[\"POST\"])\ndef execute():\n    code = request.json.get(\"code\")\n    result = client.run_ipython_cell(code)\n    return result\n\nif __name__ == \"__main__\":\n    app.run(port=5000)"
+    },
+    {
+      "title": "Example 10",
+      "description": "Example demonstrating key functionality of the sandboxai library.",
+      "code": "from flask import Flask, request\nfrom sandboxai.client.v1 import Client\n\napp = Flask(__name__)\nclient = Client(base_url=\"http://localhost:8080\")\n\n@app.route(\"/evaluate\", methods=[\"POST\"])\ndef evaluate():\n    code = request.form.get(\"code\")\n    result = client.run_ipython_cell(code)\n    return f\"<pre>{result['output']}</pre>\"\n\nif __name__ == \"__main__\":\n    app.run(port=5000)"
+    }
+  ],
+  "main_purpose": "# Purpose and Scope\nThe repository is part of the **sandboxai** project, which aims to provide a secure, sandboxed environment for executing arbitrary code or commands. The system enables users to interact with this sandbox through APIs and clients, ensuring isolation and safety when running untrusted code. This aligns with the broader goal of creating tools for evaluating or testing code in controlled conditions.\n\n# Core Features\n- **Sandbox Execution**: Provides a secure containerized environment for executing code.\n- **API Integration**: Exposes RESTful APIs (v1) for programmatic interaction with the sandbox.\n- **Client Libraries**: Includes both Python and Go client libraries for easier integration into various workflows.\n- **End-to-End Testing**: Comprehensive test suites in `test/e2e` ensure reliability and correctness.\n- **Extensibility**: Experimental modules like `crewai.py` suggest ongoing development for advanced use cases.\n\n# Target Audience/Users\nThe primary users of this repository are:\n- Developers needing secure environments for code execution.\n- Researchers or engineers working on automated testing or evaluation systems.\n- Teams integrating sandboxed execution capabilities into larger applications.\n\n# Main Technologies or Frameworks Used\n- **Go**: Used extensively for building the backend services, including the sandbox handler and API generation.\n- **Python**: Provides client libraries and scripts for interacting with the sandbox.\n- **Docker**: Integral to sandboxing, as evident from files like `box.Dockerfile`.\n- **Excalidraw**: Used for diagramming the architecture (e.g., `overview.excalidraw.png`).\n- **OpenAPI**: API definitions follow OpenAPI standards (`api/v1.yaml`).\n\nThis repository integrates these technologies to deliver a robust solution for secure code execution.",
+  "use_cases": "",
+  "benchmark_table": [],
+  "components": {
+    "Explanation of Groupings": {
+      "purpose": "### Detailed Documentation for the 'Explanation of Groupings' Component",
+      "usage": "interaction:\n- A developer might use the `python/sandboxai/experimental/crewai.py` module to explore groupings in an experimental context.\n- Another developer might modify the `test/e2e/cases/run_shell_command.json` file to add new test cases while adhering to the grouping structure.",
+      "methods": [
+        "Algorithms",
+        "Documentation",
+        "Classes",
+        "IGrouping",
+        "Methods",
+        "group_name",
+        "validation_rules",
+        "Testing",
+        "Containerization",
+        "Caching",
+        "Configuration"
+      ],
+      "code_example": "from python.sandboxai.client.v1 import GroupingManager\n\nmanager = GroupingManager()\ngroupings = manager.get_groupings()\nfor group in groupings:\n    print(f\"Group Name: {group['name']}, Type: {group['type']}\")",
+      "methods_with_descriptions": [
+        {
+          "name": "Algorithms",
+          "description": "- The component may use tree traversal algorithms to parse and analyze hierarchical structures, such as the project directory or configuration files."
+        },
+        {
+          "name": "Documentation",
+          "description": "Reading detailed descriptions in files like `README.md` or `contributing.md`."
+        },
+        {
+          "name": "Classes",
+          "description": "- `GroupingManager`: Manages all groupings and provides methods for querying and updating them."
+        },
+        {
+          "name": "IGrouping",
+          "description": "Defines the contract for any grouping entity, specifying required attributes and behaviors."
+        },
+        {
+          "name": "Methods",
+          "description": "- `get_groupings()`: Retrieves all defined groupings.\n  - `add_grouping(group_name, config)`: Adds a new grouping with the given configuration.\n  - `remove_grouping(group_name)`: Removes a grouping by name.\n  - `validate_groupings()`: Ensures all groupings conform to specified rules."
+        },
+        {
+          "name": "group_name",
+          "description": "(default_value: None): Name of the grouping being added or modified."
+        },
+        {
+          "name": "validation_rules",
+          "description": "(default_value: []): List of rules to enforce during grouping creation or updates."
+        },
+        {
+          "name": "Testing",
+          "description": "Organizing test cases into logical groups for better execution and reporting (e.g., `test/e2e/cases/`)."
+        },
+        {
+          "name": "Containerization",
+          "description": "Structuring Docker configurations in `box.Dockerfile`."
+        },
+        {
+          "name": "Caching",
+          "description": "Cache frequently accessed groupings to improve performance."
+        },
+        {
+          "name": "Configuration",
+          "description": "`test/e2e/sandbox.json`, `api/v1.yaml`"
+        }
+      ],
+      "parameters": [],
+      "source_files": [
+        {
+          "file": "python/sandboxai/experimental/crewai.py",
+          "lines": "1-42",
+          "github_url": "https://github.com/substratusai/sandboxai/blob/main/python/sandboxai/experimental/crewai.py#L1-L42"
+        },
+        {
+          "file": "python/sandboxai/client/v1.py",
+          "lines": "5-54",
+          "github_url": "https://github.com/substratusai/sandboxai/blob/main/python/sandboxai/client/v1.py#L5-L54"
+        }
+      ]
+    }
+  },
+  "architecture": "# System Architecture Overview\n\nThis repository, named \"sandboxai,\" is designed to create a secure and isolated environment for executing code snippets or commands. The system is built with modularity in mind, allowing different components to interact seamlessly while maintaining clear separation of responsibilities. Below is a detailed breakdown of the architecture.\n\n## High-Level Description\nThe sandboxai system provides an API-driven interface to execute arbitrary code or shell commands within a controlled and isolated environment. It leverages both Go and Python languages for backend services and client interactions, ensuring flexibility and scalability. The architecture includes Docker-based sandboxing mechanisms to ensure safety and reproducibility of executions.\n\n---\n\n## Main Components and Their Roles\n\n* **Go Backend**: This component houses the core logic of the application, including the API server and sandbox handler. It manages incoming requests, validates them, and orchestrates the execution process.\n    The go/sandboxaid/main.go file serves as the entry point for the backend service.\n    It interacts with the Docker daemon to manage containers that act as sandboxes.\n\n* **Python Client**: Written in Python, this component acts as the primary interface for users who wish to interact with the sandboxai system. It communicates with the Go backend via RESTful APIs defined in api/v1.yaml.\n    The python/sandboxai/client/v1.py file contains the implementation for making API calls to the backend.\n\n* **Docker Integration**: Docker is used extensively to create isolated environments (containers) where user-submitted code or commands are executed. These containers ensure that malicious or faulty code cannot affect the host system.\n    Configuration details for the Docker setup can be found in box.Dockerfile and go/sandboxaid/client/docker/docker.go.\n\n* **API Specification**: A well-defined API specification outlines the endpoints and data formats expected by the system. This ensures consistency across clients and servers.\n    The api/v1.yaml file defines the structure of the API, which includes methods for submitting jobs, retrieving results, and managing resources.\n\n* **Test Suite**: Comprehensive testing is implemented at multiple levels to ensure reliability and correctness. End-to-end tests (located in test/e2e and go/test/e2e) simulate real-world scenarios and verify the entire workflow from request submission to result retrieval.\n\n* **Documentation**: Clear documentation is provided to guide developers and users through the system's functionality. Diagrams such as docs/diagrams/overview.excalidraw.png visually represent the architecture, while files like README.md offer textual explanations.\n\n* **Experimental Features**: Some experimental features are housed under the python/sandboxai/experimental directory. For example, crewai.py might contain prototypes or new ideas being explored but not yet integrated into the main system.\n\n---\n\n## Data Flow Between Components\n\n1. A user submits a request through the Python client, specifying the code or command they want to execute along with any necessary parameters.\n2. The Python client sends this request to the Go backend using the predefined API endpoints.\n3. Upon receiving the request, the Go backend validates it and forwards the task to the sandbox handler.\n4. The sandbox handler creates a new Docker container configured according to the requirements specified in the request.\n5. Inside the container, the requested code or command is executed in isolation.\n6. Once execution completes, the output (or error messages) is captured and returned to the Go backend.\n7. Finally, the Go backend relays the result back to the Python client, which presents it to the user.\n\n---\n\n## External Dependencies and Integrations\n\n* **Docker**: Essential for creating isolated execution environments. Without Docker, the system would lack the ability to safely run untrusted code.\n* **RESTful APIs**: Used for communication between the Python client and the Go backend. This choice allows flexibility and compatibility with various programming languages.\n* **YAML Files**: Employed for defining API specifications and configuration settings, ensuring clarity and maintainability.\n* **Markdown and PNG Files**: Utilized for documenting and illustrating the system architecture, helping onboard new contributors and users.\n\nBy combining these elements, sandboxai achieves its goal of providing a robust, secure, and user-friendly platform for executing code in a controlled manner.",
+  "architectural_philosophy": "",
+  "numbered_concepts": [],
+  "architecture_sections": [
+    {
+      "id": "main-components-and-their-roles",
+      "title": "Main Components and Their Roles",
+      "content": "* **Go Backend**: This component houses the core logic of the application, including the API server and sandbox handler. It manages incoming requests, validates them, and orchestrates the execution process.\n    The go/sandboxaid/main.go file serves as the entry point for the backend service.\n    It interacts with the Docker daemon to manage containers that act as sandboxes.\n\n* **Python Client**: Written in Python, this component acts as the primary interface for users who wish to interact with the sandboxai system. It communicates with the Go backend via RESTful APIs defined in api/v1.yaml.\n    The python/sandboxai/client/v1.py file contains the implementation for making API calls to the backend.\n\n* **Docker Integration**: Docker is used extensively to create isolated environments (containers) where user-submitted code or commands are executed. These containers ensure that malicious or faulty code cannot affect the host system.\n    Configuration details for the Docker setup can be found in box.Dockerfile and go/sandboxaid/client/docker/docker.go.\n\n* **API Specification**: A well-defined API specification outlines the endpoints and data formats expected by the system. This ensures consistency across clients and servers.\n    The api/v1.yaml file defines the structure of the API, which includes methods for submitting jobs, retrieving results, and managing resources.\n\n* **Test Suite**: Comprehensive testing is implemented at multiple levels to ensure reliability and correctness. End-to-end tests (located in test/e2e and go/test/e2e) simulate real-world scenarios and verify the entire workflow from request submission to result retrieval.\n\n* **Documentation**: Clear documentation is provided to guide developers and users through the system's functionality. Diagrams such as docs/diagrams/overview.excalidraw.png visually represent the architecture, while files like README.md offer textual explanations.\n\n* **Experimental Features**: Some experimental features are housed under the python/sandboxai/experimental directory. For example, crewai.py might contain prototypes or new ideas being explored but not yet integrated into the main system.\n\n---"
+    },
+    {
+      "id": "data-flow-between-components",
+      "title": "Data Flow Between Components",
+      "content": "1. A user submits a request through the Python client, specifying the code or command they want to execute along with any necessary parameters.\n2. The Python client sends this request to the Go backend using the predefined API endpoints.\n3. Upon receiving the request, the Go backend validates it and forwards the task to the sandbox handler.\n4. The sandbox handler creates a new Docker container configured according to the requirements specified in the request.\n5. Inside the container, the requested code or command is executed in isolation.\n6. Once execution completes, the output (or error messages) is captured and returned to the Go backend.\n7. Finally, the Go backend relays the result back to the Python client, which presents it to the user.\n\n---"
+    },
+    {
+      "id": "external-dependencies-and-integrations",
+      "title": "External Dependencies and Integrations",
+      "content": "* **Docker**: Essential for creating isolated execution environments. Without Docker, the system would lack the ability to safely run untrusted code.\n* **RESTful APIs**: Used for communication between the Python client and the Go backend. This choice allows flexibility and compatibility with various programming languages.\n* **YAML Files**: Employed for defining API specifications and configuration settings, ensuring clarity and maintainability.\n* **Markdown and PNG Files**: Utilized for documenting and illustrating the system architecture, helping onboard new contributors and users.\n\nBy combining these elements, sandboxai achieves its goal of providing a robust, secure, and user-friendly platform for executing code in a controlled manner."
+    }
+  ],
+  "architecture_files": [
+    "go/sandboxaid/client/docker/docker.go",
+    "python/sandboxai/client/v1.py",
+    "go/sandboxaid/main.go"
+  ],
+  "flow_diagrams": {
+    "architecture": {
+      "mermaid_code": "graph TD\n    A[SandboxAI System] --> B[Go Modules]\n    A --> C[Python Modules]\n    A --> D[Test Framework]\n\n    subgraph GoModules [Go Components]\n        E(go/sandboxaid) --> F(\"go/sandboxaid/client/docker\")\n        F --> G(\"go/sandboxaid/handler\")\n        H(\"go/api/v1\") --> I(\"go/client/v1\")\n    end\n\n    subgraph PythonModules [Python Components]\n        J(python/sandboxai) --> K(\"python/sandboxai/client/v1.py\")\n        L(\"python/boxd\") --> M(\"python/sandboxai/test/e2e\")\n    end\n\n    subgraph TestFramework [Testing Components]\n        N(test/e2e) --> O(\"test/e2e/cases/run_shell_command.json\")\n        P(\"go/test/e2e\") --> Q(\"go/test/e2e/main_test.go\")\n    end",
+      "description": "Below are the three high-level architectural diagrams for the provided codebase, along with brief explanations to help users understand the system's structure and behavior.\n\n---\n\n### **1. System Overview Diagram**\nThis diagram shows the main components of the system and their relationships. It highlights the key modules and how they interact with each other.",
+      "title": "Below are the three high-level architectural diagrams for the provided codebase, along with brief explanations to help users understand the system's structure and behavior."
+    },
+    "workflow": {
+      "mermaid_code": "sequenceDiagram\n    participant User\n    participant API as go/api/v1\n    participant Client as go/client/v1\n    participant SandboxServer as go/sandboxaid\n    participant DockerExecutor as go/sandboxaid/client/docker\n    participant PythonClient as python/sandboxai/client/v1.py\n\n    Note over User,API: 1. User sends request via API\n    User->>API: Send request (e.g., run command)\n    activate API\n\n    Note over API,Client: 2. API forwards request to Go Client\n    API->>Client: Forward request\n    activate Client\n\n    Note over Client,SandboxServer: 3. Go Client communicates with Sandbox Server\n    Client->>SandboxServer: Execute request\n    activate SandboxServer\n\n    Note over SandboxServer,DockerExecutor: 4. Sandbox Server delegates to Docker Executor\n    SandboxServer->>DockerExecutor: Run containerized task\n    activate DockerExecutor\n\n    DockerExecutor-->>SandboxServer: Return result\n    deactivate DockerExecutor\n\n    SandboxServer-->>Client: Return result\n    deactivate SandboxServer\n\n    Client-->>API: Return result\n    deactivate Client\n\n    API-->>User: Return final response\n    deactivate API\n\n    alt Optional Python Interaction\n        Note over User,PythonClient: 5. User can also use Python Client\n        User->>PythonClient: Send request\n        PythonClient->>API: Forward request\n    end",
+      "description": ").  \n- Testing is handled by both Go and Python test suites, with specific cases defined in JSON files.\n\n---\n\n### **2. Workflow Diagram**\nThis diagram illustrates the main process flows within the system, focusing on how requests are processed and executed.",
+      "title": ")."
+    },
+    "component_relationships": {
+      "mermaid_code": "classDiagram\n    class SandboxAID {\n        +main()\n        +HandleRequest()\n    }\n    class DockerClient {\n        +ExecuteCommand()\n        +RunContainer()\n    }\n    class Handler {\n        +ProcessRequest()\n    }\n    class APITypes {\n        +GenerateTypes()\n    }\n    class GoClientV1 {\n        +SendRequest()\n    }\n    class PythonClientV1 {\n        +SendRequest()\n    }\n\n    SandboxAID \"1\" -- \"1\" Handler : has\n    SandboxAID \"1\" -- \"1\" DockerClient : uses\n    Handler \"1\" -- \"1\" APITypes : depends on\n    GoClientV1 \"1\" ..> \"1\" SandboxAID : communicates with\n    PythonClientV1 \"1\" ..> \"1\" APITypes : interacts with\n\n    note left of DockerClient\n        Handles Docker-based operations.\n    end note\n\n    note right of APITypes\n        Defines data structures used across components.\n    end note",
+      "description": ").\n\n---\n\n### **3. Detailed Component Relationship Diagram**\nThis diagram provides a more detailed view of the relationships between specific components, focusing on dependencies and interactions.",
+      "title": ")."
+    }
+  },
+  "component_table": [
+    {
+      "name": "Explanation of Groupings",
+      "description": "Core services: components like the sandboxai core service and docker client form the backbone of the system, handling primary responsibilities such as task execution and container management.api and communication: the api layer and python client library enable seamless interaction between the service and external consumers, ensuring robust communication.execution environment: the embedded execution environment focuses on running user-defined code safely within the sandbox, leveraging modular design for flexibility.testing and validation: the end-to-end test suite ensures quality and reliability through comprehensive testing, interacting with various components to validate functionality.supporting resources: documentation, example scripts, and utility scripts enhance usability, demonstrate real-world applications, and streamline development processes.auxiliary modules: experimental features and the box service explore new ideas or provide supplementary functionality, contributing to the system's adaptability and extensibility."
+    }
+  ],
+  "getting_started": "",
+  "basic_example": "from sandboxai.client.v1 import Client\n\nclient = Client(api_key=\"your_api_key\")\nresponse = client.run_shell_command(\"echo Hello, SandboxAI!\")\nprint(response.output)",
+  "usage_features": [],
+  "advanced_usage": "```markdown\n# Comprehensive Usage Guide for SandboxAI\n\nSandboxAI is a versatile repository designed to facilitate secure and isolated execution of code snippets, making it ideal for applications such as agent-based systems, sandboxed environments, or educational tools. This guide will walk you through everything you need to know to get started, configure, and make the most out of SandboxAI.\n\n---\n\n## Table of Contents\n\n1. [Getting Started with Basic Examples](#getting-started-with-basic-examples)\n2. [Initializing and Configuring the System](#initializing-and-configuring-the-system)\n3. [Common Usage Patterns with Code Examples](#common-usage-patterns-with-code-examples)\n4. [Advanced Usage Scenarios](#advanced-usage-scenarios)\n5. [Performance Optimization Tips](#performance-optimization-tips)\n6. [Best Practices and Recommended Approaches](#best-practices-and-recommended-approaches)\n\n---\n\n## 1. Getting Started with Basic Examples\n\n### Prerequisites\nEnsure you have Docker installed on your system. Additionally, clone this repository and navigate to the root directory:\n```bash\ngit clone https://github.com/raccoonrat/agent-as-a-judge.git\ncd agent-as-a-judge/repo_docs/sandboxai\n```\n\n### Running a Simple Example\nTo execute a basic example, use the `python/examples` folder. For instance, try running the `basic.py` script:\n```bash\npython python/examples/basic.py\n```\nThis script demonstrates how to interact with the SandboxAI API by executing a simple shell command.\n\n**File Path**: `python/examples/basic.py`\n\n```python\nfrom sandboxai.client.v1 import Client\n\nclient = Client(api_key=\"your_api_key\")\nresponse = client.run_shell_command(\"echo Hello, SandboxAI!\")\nprint(response.output)\n```\n\n---\n\n## 2. Initializing and Configuring the System\n\n### Setting Up the Environment\nBefore using SandboxAI, ensure the Docker environment is properly configured. Use the provided `Dockerfile` located at `.`, along with the `Makefile` for convenience.\n\n#### Steps:\n1. Build the Docker image:\n   ```bash\n   docker build -t sandboxai-box -f box.Dockerfile .\n   ```\n2. Start the service using Makefile:\n   ```bash\n   make start\n   ```\n\n### Configuration\nThe configuration is primarily handled via environment variables or API parameters. Refer to the `go/sandboxaid/main.go` file for default settings.\n\n**Key Configuration Parameters:**\n- `SANDBOX_API_KEY`: Your personal API key.\n- `SANDBOX_TIMEOUT`: Timeout for sandbox executions (default: 30 seconds).\n\n---\n\n## 3. Common Usage Patterns with Code Examples\n\n### Example 1: Running an IPython Cell\nUse the `run_ipython_cell.json` test case to execute Python cells in a sandboxed environment.\n\n**File Path**: `test/e2e/cases/run_ipython_cell.json`\n\n```python\nfrom sandboxai.client.v1 import Client\n\nclient = Client(api_key=\"your_api_key\")\ncode = \"result = 2 + 2; result\"\nresponse = client.run_ipython_cell(code)\nprint(response.output)  # Output: 4\n```\n\n### Example 2: Logging Outputs\nEnable logging to capture detailed execution logs. Use the `basic-with-logging.py` example.\n\n**File Path**: `python/examples/basic-with-logging.py`\n\n```python\nfrom sandboxai.client.v1 import Client\n\nclient = Client(api_key=\"your_api_key\", enable_logging=True)\nresponse = client.run_shell_command(\"ls -la\")\nprint(response.logs)  # Detailed logs of the command execution\n```\n\n### Example 3: Handling Errors Gracefully\nCatch exceptions and handle errors effectively.\n\n```python\nfrom sandboxai.client.v1 import Client, SandboxError\n\ntry:\n    client = Client(api_key=\"your_api_key\")\n    response = client.run_shell_command(\"invalid-command\")\nexcept SandboxError as e:\n    print(f\"Error occurred: {e}\")\n```\n\n---\n\n## 4. Advanced Usage Scenarios\n\n### Scenario 1: Customizing Execution Environments\nModify the Docker container's environment variables or install additional packages. Refer to the `box.Dockerfile`.\n\n#### Steps:\n1. Update the `box.Dockerfile` to include custom dependencies.\n2. Rebuild the Docker image:\n   ```bash\n   docker build -t custom-sandboxai-box -f box.Dockerfile .\n   ```\n\n### Scenario 2: Parallel Execution of Tasks\nLeverage the `swarm-agent.py` example to run multiple tasks concurrently.\n\n**File Path**: `python/examples/swarm-agent.py`\n\n```python\nfrom sandboxai.client.v1 import Client\nimport concurrent.futures\n\ndef execute_task(task):\n    client = Client(api_key=\"your_api_key\")\n    return client.run_shell_command(task).output\n\ntasks = [\"echo Task 1\", \"echo Task 2\", \"echo Task 3\"]\n\nwith concurrent.futures.ThreadPoolExecutor() as executor:\n    results = list(executor.map(execute_task, tasks))\nprint(results)\n```\n\n---\n\n## 5. Performance Optimization Tips\n\n1. **Batch Requests**: Combine multiple commands into a single request to reduce overhead.\n2. **Cache Results**: Store frequently used outputs to minimize redundant computations.\n3. **Tune Timeouts**: Adjust the `SANDBOX_TIMEOUT` parameter based on your workload to avoid unnecessary delays.\n4. **Limit Resource Usage**: Restrict CPU, memory, and disk usage in the Docker container to prevent abuse.\n\n---\n\n## 6. Best Practices and Recommended Approaches\n\n1. **Secure API Keys**: Never expose your API keys in public repositories or logs.\n2. **Validate Inputs**: Always sanitize inputs to prevent injection attacks.\n3. **Monitor Logs**: Regularly review logs for anomalies or unexpected behavior.\n4. **Version Control**: Pin dependencies in `go.mod` and `requirements.txt` to ensure reproducibility.\n5. **Documentation**: Refer to the `docs/README.md` and `docs/contributing.md` files for additional guidance.\n\n---\n\n## Conclusion\n\nSandboxAI provides a robust framework for executing code snippets in isolated environments. By following the examples and best practices outlined above, you can efficiently integrate SandboxAI into your projects and achieve secure, scalable execution of tasks.\n\nFor further details, explore the repository structure and documentation:\n- **API Documentation**: `api/v1.yaml`\n- **Go Modules**: `go/sandboxaid/handler/handler.go`\n- **Python Client**: `python/sandboxai/client/v1.py`\n\nHappy coding!\n```",
+  "installation": "markdown\n# Installation and Setup Instructions for SandboxAI\n\nThis guide provides detailed instructions for installing and setting up the SandboxAI repository. Follow the steps below to ensure a smooth installation process.\n\n---\n\n## Prerequisites and Dependencies\n\nBefore installing SandboxAI, ensure you have the following tools and libraries installed on your system:\n\n### General Dependencies:\n- **Docker**: Required for running sandboxed environments.\n  - Install Docker: [Official Docker Installation Guide](https://docs.docker.com/get-docker/)\n- **Go (Golang)**: Version `1.20` or higher.\n  - Install Go: [Official Go Installation Guide](https://golang.org/doc/install)\n- **Python**: Version `3.8` or higher.\n  - Install Python: [Official Python Installation Guide](https://www.python.org/downloads/)\n- **Make**: For executing build scripts.\n  - Install Make: `sudo apt-get install make` (for Ubuntu/Debian) or `brew install make` (for macOS).\n\n### Language-Specific Dependencies:\n- **Go Modules**:\n  - Path: `/home/mpcblock/lab/github.com/raccoonrat/agent-as-a-judge/repo_docs/sandboxai/go`\n  - Ensure dependencies are installed by running: `go mod download` in the `go` directory.\n- **Python Packages**:\n  - Path: `/home/mpcblock/lab/github.com/raccoonrat/agent-as-a-judge/repo_docs/sandboxai/python`\n  - Install dependencies using: `pip install -r python/boxd/requirements.txt`.\n\n### Optional Accounts:\n- **GitHub API Token**: If cloning private repositories or using GitHub Actions.\n- **Cloud Storage Account**: For storing large files generated by the sandbox environment (optional).\n\n---\n\n## Step-by-Step Installation Process\n\n### Development Environment Setup\n\n1. **Clone the Repository**:\n   bash\n   git clone https://github.com/raccoonrat/agent-as-a-judge.git\n   cd agent-as-a-judge/repo_docs/sandboxai\n   \n\n2. **Build Docker Image**:\n   - Path: `.`\n   - Use the provided `Dockerfile` to build the image:\n     bash\n     docker build -t sandboxai-box -f box.Dockerfile .\n     \n\n3. **Install Go Dependencies**:\n   - Navigate to the `go` directory:\n     bash\n     cd go\n     go mod download\n     \n\n4. **Install Python Dependencies**:\n   - Navigate to the `python` directory:\n     bash\n     cd ../python\n     pip install -r boxd/requirements.txt\n     \n\n5. **Generate API Types**:\n   - Path: `/go/api/v1`\n   - Run the generator script:\n     bash\n     go run generate.go\n     \n\n6. **Run Tests**:\n   - Execute end-to-end tests:\n     bash\n     cd test/e2e\n     ./run.sh\n     \n\n### Production Environment Setup\n\n1. **Follow Steps 1-4 from Development Setup**.\n\n2. **Configure Environment Variables**:\n   - See Section 3 for details on configuring environment variables.\n\n3. **Start the Service**:\n   - Path: `/go/sandboxaid`\n   - Run the main application:\n     bash\n     go run main.go\n     \n\n4. **Verify Service Health**:\n   - Use the Python client to interact with the API:\n     python\n     from sandboxai.client.v1 import Client\n\n     client = Client(api_url=\"http://localhost:8080\")\n     print(client.health_check())\n     \n\n---\n\n## Configuration Options and Environment Variables\n\nSandboxAI supports several configuration options through environment variables. Below are the most common ones:\n\n| Variable Name              | Description                                      | Default Value          | Example                          |\n|---------------------------|------------------------------------------------|-----------------------|----------------------------------|\n| `SANDBOXAI_API_URL`       | Base URL for the API                           | `http://localhost:8080` | `export SANDBOXAI_API_URL=http://api.sandboxai.com` |\n| `DOCKER_HOST`            | Docker daemon host                             | `unix:///var/run/docker.sock` | `export DOCKER_HOST=tcp://docker-host:2375` |\n| `LOG_LEVEL`              | Logging level (DEBUG, INFO, WARN, ERROR)        | `INFO`                | `export LOG_LEVEL=DEBUG`         |\n| `MAX_EXECUTION_TIME`     | Maximum execution time for sandbox tasks (seconds) | `60`                 | `export MAX_EXECUTION_TIME=120`  |\n\nExample of setting environment variables:\nbash\nexport SANDBOXAI_API_URL=http://api.sandboxai.com\nexport LOG_LEVEL=DEBUG\n\n---\n\n## Verifying the Installation\n\nTo verify that the installation was successful, perform the following checks:\n\n1. **Check API Health**:\n   - Use the Python client:\n     python\n     from sandboxai.client.v1 import Client\n\n     client = Client(api_url=\"http://localhost:8080\")\n     if client.health_check():\n         print(\"API is healthy!\")\n     else:\n         print(\"API is not responding.\")\n     \n\n2. **Run End-to-End Tests**:\n   - Navigate to the `test/e2e` directory and execute:\n     bash\n     ./run.sh\n     \n\n3. **Inspect Logs**:\n   - Check logs for any errors:\n     bash\n     tail -f /var/log/sandboxai.log\n     \n\n---\n\n## Common Installation Problems and Solutions\n\n### Problem: Missing Go Modules\n- **Cause**: Go modules were not downloaded correctly.\n- **Solution**: Run `go mod tidy` in the `go` directory.\n\n### Problem: Docker Permissions Denied\n- **Cause**: Insufficient permissions to access Docker.\n- **Solution**: Add your user to the Docker group:\n  bash\n  sudo usermod -aG docker $USER\n  newgrp docker\n  \n\n### Problem: Python Dependency Errors\n- **Cause**: Incorrect Python version or missing packages.\n- **Solution**: Ensure Python 3.8+ is installed and reinstall dependencies:\n  bash\n  pip install --upgrade pip\n  pip install -r python/boxd/requirements.txt\n  \n\n---\n\n## References to Setup Files\n\n- **Go Modules**:\n  - `go/go.mod`\n  - `go/tools/go.mod`\n\n- **Python Requirements**:\n  - `python/boxd/requirements.txt`\n\n- **Dockerfile**:\n  - `box.Dockerfile`\n\n- **End-to-End Tests**:\n  - `test/e2e/run.sh`\n  - `test/e2e/cases/run_shell_command.json`\n\n- **API Specification**:\n  - `api/v1.yaml`\n\n---\n\n## Additional Notes\n\n- **Operating Systems**: The above instructions apply to Linux and macOS. For Windows, consider using WSL (Windows Subsystem for Linux) to run Unix-based tools like Docker and Make.\n- **Multiple Installation Methods**: You can either use Docker containers for isolation or directly install dependencies on your host machine. Using Docker ensures consistency across environments but may introduce overhead.\n\nIf you encounter any issues during setup, feel free to open an issue on the [GitHub repository](https://github.com/raccoonrat/agent-as-a-judge/issues).",
+  "parameters": [
+    {
+      "name": "SANDBOX_API_KEY",
+      "values": "Not specified",
+      "notes": "Your personal API key."
+    }
+  ],
+  "generated_at": "2025-05-19 16:27:38",
+  "generation_time_seconds": 881.3664391040802
+}

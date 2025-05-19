@@ -1,0 +1,3116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sandboxai Documentation</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked@9.1.5/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/json.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        docusaurus: {
+                            50: '#FFF9EB',
+                            100: '#FFF3D6',
+                            200: '#FFE7AD',
+                            300: '#FFDB85',
+                            400: '#FFD05C',
+                            500: '#FFCB45',
+                            600: '#E6B53E',
+                            700: '#CC9F36',
+                            800: '#B38A2F',
+                            900: '#997427',
+                        },
+                        sidebar: {
+                            bg: '#F9F9F9',
+                            hover: '#F2F2F2',
+                            active: '#FFFBF2',
+                        },
+                        text: {
+                            primary: '#606770',
+                            secondary: '#8B949E',
+                            heading: '#444950',
+                            link: '#3578e5',
+                        },
+                        code: {
+                            bg: '#F6F8FA',
+                            text: '#6B7280',
+                        },
+                        border: '#E5E7EB',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        mono: ['SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            background-color: #FFFDF6;
+            font-size: 13px;
+        }
+
+        main {
+            max-width: 1000px;
+            padding: 1.5rem 2rem;
+        }
+        
+        .code-block-container {
+            margin: 1rem 0;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            max-width: 100%;
+        }
+        
+        .code-block-title {
+            display: flex;
+            padding: 8px 15px;
+            background-color: #e9ecef;
+            border-bottom: 1px solid #dee2e6;
+            font-family: 'SF Mono', 'Roboto Mono', monospace;
+            font-size: 0.85rem;
+            color: #495057;
+        }
+        
+        .standalone-code-block {
+            font-family: 'SF Mono', 'Roboto Mono', monospace;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 15px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            position: relative;
+        }
+        
+        .code-language {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: #e9ecef;
+            padding: 2px 8px;
+            font-size: 0.7rem;
+            border-bottom-left-radius: 4px;
+            text-transform: uppercase;
+            color: #495057;
+        }
+        
+        .copy-button {
+            padding: 0.2rem 0.5rem;
+            background: #e9ecef;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            color: #495057;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .copy-button:hover {
+            background: #dee2e6;
+        }
+        
+        .code-block-container pre {
+            margin: 0;
+            padding: 15px;
+            overflow-x: auto;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            background-color: #f8f9fa;
+        }
+        
+        .code-block-container pre::before {
+            display: none;
+        }
+        
+        .code-block-container code {
+            font-family: 'SF Mono', 'Roboto Mono', monospace;
+            font-size: 0.9rem;
+            padding: 0.1rem 0.3rem;
+            background-color: #f1f3f5;
+            border-radius: 3px;
+        }
+        
+        .step-number {
+            display: inline-block;
+            width: 1.8rem;
+            height: 1.8rem;
+            background-color: #495057;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 1.8rem;
+            margin-right: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .deployment-steps {
+            margin: 1.5rem 0;
+        }
+        
+        .deployment-step {
+            margin-bottom: 1.5rem;
+        }
+        
+        .deployment-step-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .component-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            margin-bottom: 1.25rem;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        
+        .component-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background-color: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .component-header h3 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #4b5563;
+        }
+        
+        .component-body {
+            padding: 1rem;
+        }
+        
+        .component-section {
+            margin-bottom: 0.75rem;
+        }
+        
+        .component-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .section-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: #4b5563;
+            font-size: 0.9rem;
+        }
+        
+        .section-content {
+            color: #6b7280;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .compact-table {
+            width: 100%;
+            margin: 0.5rem 0;
+            font-size: 0.8rem;
+        }
+        
+        .compact-table th {
+            padding: 0.5rem 0.75rem;
+            text-align: left;
+            background-color: #f9fafb;
+        }
+        
+        .compact-table td {
+            padding: 0.5rem 0.75rem;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .two-column-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #b8bcbf;
+        }
+
+        .mermaid {
+            padding: 1.5rem;
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            margin: 1.5rem 0;
+        }
+        
+        .mermaid-container {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+            background-color: white;
+        }
+        
+        .mermaid-header {
+            padding: 0.75rem 1rem;
+            background-color: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            font-weight: 600;
+            color: #4b5563;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .mermaid-body {
+            padding: 1rem;
+        }
+        
+        .mermaid-diagram {
+            background-color: #fafafa;
+            border-radius: 6px;
+            padding: 1rem;
+            overflow-x: auto;
+        }
+        
+        .flow-steps {
+            margin: 2rem 0;
+        }
+        
+        .flow-step {
+            display: flex;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .flow-step:not(:last-child):after {
+            content: '';
+            position: absolute;
+            top: 1.8rem;
+            left: 0.9rem;
+            height: calc(100% + 0.75rem);
+            width: 2px;
+            background-color: #e5e7eb;
+            z-index: 0;
+        }
+        
+        .flow-step-number {
+            flex-shrink: 0;
+            width: 1.8rem;
+            height: 1.8rem;
+            border-radius: 50%;
+            background-color: #ffcb45;
+            color: #fff;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .flow-step-content {
+            flex-grow: 1;
+            padding-bottom: 0.5rem;
+        }
+        
+        .flow-step-title {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .flow-step-description {
+            color: #6b7280;
+            margin-bottom: 0.75rem;
+        }
+
+        pre {
+            background-color: #282c34;
+            border-radius: 6px;
+            margin: 1rem 0;
+            padding: 0;
+            overflow-x: auto;
+            border: 1px solid #383c44;
+            position: relative;
+        }
+
+        pre code {
+            font-family: 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace';
+            font-size: 0.8125rem;
+            line-height: 1.6;
+            padding: 1rem !important;
+            border-radius: 6px;
+            display: block;
+            overflow-x: auto;
+            color: #abb2bf;
+        }
+
+        pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, #ffcb45, #ffe7ad);
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+            z-index: 10;
+        }
+
+        pre::after {
+            content: attr(data-language);
+            position: absolute;
+            top: 0;
+            right: 0;
+            color: #8b949e;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            text-transform: uppercase;
+            border-radius: 0 6px 0 6px;
+            background-color: rgba(255, 255, 255, 0.7);
+            z-index: 5;
+        }
+
+        code:not(pre code) {
+            background-color: rgba(255, 203, 69, 0.1);
+            border-radius: 3px;
+            font-family: 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace';
+            font-size: 85%;
+            padding: 0.2em 0.4em;
+            color: #d97706;
+        }
+
+        table {
+            width: 100%;
+            margin: 1rem 0;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            font-size: 0.8125rem;
+        }
+
+        th {
+            background-color: #f9fafb;
+            color: #374151;
+            font-weight: 600;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            color: #4b5563;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .collapsible.expanded .collapsible-content {
+            max-height: 1000px;
+        }
+
+        .collapsible-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible.expanded .collapsible-icon {
+            transform: rotate(90deg);
+        }
+        
+        .markdown-content h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        
+        .markdown-content h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: #374151;
+        }
+        
+        .markdown-content h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: #374151;
+        }
+        
+        .markdown-content p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .markdown-content ul, .markdown-content ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .markdown-content li {
+            margin-bottom: 0.25rem;
+        }
+        
+        .markdown-content a {
+            color: #3578e5;
+            text-decoration: none;
+        }
+        
+        .markdown-content a:hover {
+            text-decoration: underline;
+        }
+        
+        .markdown-content blockquote {
+            border-left: 4px solid #e5e7eb;
+            padding-left: 1rem;
+            font-style: italic;
+            margin: 1rem 0;
+            color: #6b7280;
+        }
+        
+        .source-reference {
+            display: inline-flex;
+            align-items: center;
+            background: #f3f4f6;
+            border-radius: 4px;
+            padding: 0.25rem 0.5rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.75rem;
+            color: #4b5563;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .source-reference:hover {
+            background: #e5e7eb;
+        }
+        
+        .source-icon {
+            margin-right: 0.25rem;
+            width: 0.875rem;
+            height: 0.875rem;
+        }
+        
+        .sidebar-nav-item {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
+
+        .example-card {
+            background-color: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+        
+        .example-header {
+            background-color: #f8f9fa;
+            padding: 12px 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .example-title {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #212529;
+        }
+        
+        .example-body {
+            padding: 15px;
+        }
+        
+        .example-description {
+            margin-bottom: 15px;
+            color: #495057;
+        }
+
+        .source-link {
+            color: #3578e5;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .source-link:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body class="font-sans text-text-primary">
+    <div class="flex min-h-screen p-4">
+        <nav class="w-72 fixed inset-y-4 bg-sidebar-bg shadow-sm border-r border-border overflow-y-auto rounded-lg flex flex-col" style="left: 16px; height: calc(100vh - 32px);">
+            <div class="px-4 py-6">
+                <div class="text-xl text-text-heading text-center font-bold mb-4">substratusai/sandboxai</div>
+                <div class="mt-2 text-xs text-text-secondary text-center">Last indexed: 2025-05-19 16:12:57</div>
+            </div>
+            
+            <ul class="space-y-1 px-2 flex-grow">
+                <li>
+                    <a href="#overview" class="sidebar-nav-item block py-1.5 px-3 rounded-md text-sm hover:bg-sidebar-hover hover:text-text-heading transition-colors nav-link">Overview</a>
+                </li>
+                <li>
+                    <a href="#architecture" class="sidebar-nav-item block py-1.5 px-3 rounded-md text-sm hover:bg-sidebar-hover hover:text-text-heading transition-colors nav-link">Architecture</a>
+                    
+                    <div class="ml-4 mt-1 space-y-1">
+                        
+                        <a href="#main-components-and-their-roles" class="sidebar-nav-item block py-1 px-3 rounded-md text-xs text-text-secondary hover:bg-sidebar-hover hover:text-text-heading transition-colors nav-link">Main Components and Their Roles</a>
+                        
+                        <a href="#data-flow-between-components" class="sidebar-nav-item block py-1 px-3 rounded-md text-xs text-text-secondary hover:bg-sidebar-hover hover:text-text-heading transition-colors nav-link">Data Flow Between Components</a>
+                        
+                        <a href="#external-dependencies-and-integrations" class="sidebar-nav-item block py-1 px-3 rounded-md text-xs text-text-secondary hover:bg-sidebar-hover hover:text-text-heading transition-colors nav-link">External Dependencies and Integrations</a>
+                        
+                    </div>
+                    
+                </li>
+                <li>
+                    <a href="#core-components" class="sidebar-nav-item block py-1.5 px-3 rounded-md text-sm hover:bg-sidebar-hover hover:text-text-heading transition-colors nav-link">Core Components</a>
+                    
+                    <div class="ml-4 mt-1 space-y-1">
+                        
+                        <a href="#component-explanation-of-groupings" class="sidebar-nav-item block py-1 px-3 rounded-md text-xs text-text-secondary hover:bg-sidebar-hover hover:text-text-heading transition-colors nav-link">Explanation of Groupings</a>
+                        
+                    </div>
+                    
+                </li>
+                <li>
+                    <a href="#usage" class="sidebar-nav-item block py-1.5 px-3 rounded-md text-sm hover:bg-sidebar-hover hover:text-text-heading transition-colors nav-link">Using sandboxai</a>
+                </li>
+                <li>
+                    <a href="#installation" class="sidebar-nav-item block py-1.5 px-3 rounded-md text-sm hover:bg-sidebar-hover hover:text-text-heading transition-colors nav-link">Installation & Setup</a>
+                </li>
+                
+                <li>
+                    <a href="#parameters" class="sidebar-nav-item block py-1.5 px-3 rounded-md text-sm hover:bg-sidebar-hover hover:text-text-heading transition-colors nav-link">Parameters</a>
+                </li>
+                
+                
+                
+                <li>
+                    <a href="#advanced-topics" class="sidebar-nav-item block py-1.5 px-3 rounded-md text-sm hover:bg-sidebar-hover hover:text-text-heading transition-colors nav-link">Advanced Topics</a>
+                    
+                    <div class="ml-4 mt-1 space-y-1">
+                        
+                        <a href="#performance-optimization-strategies" class="sidebar-nav-item block py-1 px-3 rounded-md text-xs text-text-secondary hover:bg-sidebar-hover hover:text-text-heading transition-colors nav-link">Performance Optimization Strategies</a>
+                        
+                        <a href="#architectural-optimizations" class="sidebar-nav-item block py-1 px-3 rounded-md text-xs text-text-secondary hover:bg-sidebar-hover hover:text-text-heading transition-colors nav-link">Architectural Optimizations</a>
+                        
+                        <a href="#extending-or-customizing-the-system" class="sidebar-nav-item block py-1 px-3 rounded-md text-xs text-text-secondary hover:bg-sidebar-hover hover:text-text-heading transition-colors nav-link">Extending or Customizing the System</a>
+                        
+                        <a href="#adding-new-endpoints" class="sidebar-nav-item block py-1 px-3 rounded-md text-xs text-text-secondary hover:bg-sidebar-hover hover:text-text-heading transition-colors nav-link">Adding New Endpoints</a>
+                        
+                        <a href="#customizing-behavior" class="sidebar-nav-item block py-1 px-3 rounded-md text-xs text-text-secondary hover:bg-sidebar-hover hover:text-text-heading transition-colors nav-link">Customizing Behavior</a>
+                        
+                        <a href="#internal-architecture-details" class="sidebar-nav-item block py-1 px-3 rounded-md text-xs text-text-secondary hover:bg-sidebar-hover hover:text-text-heading transition-colors nav-link">Internal Architecture Details</a>
+                        
+                        <a href="#key-components" class="sidebar-nav-item block py-1 px-3 rounded-md text-xs text-text-secondary hover:bg-sidebar-hover hover:text-text-heading transition-colors nav-link">Key Components</a>
+                        
+                        <a href="#communication-flow" class="sidebar-nav-item block py-1 px-3 rounded-md text-xs text-text-secondary hover:bg-sidebar-hover hover:text-text-heading transition-colors nav-link">Communication Flow</a>
+                        
+                        <a href="#complex-algorithms-or-techniques-used" class="sidebar-nav-item block py-1 px-3 rounded-md text-xs text-text-secondary hover:bg-sidebar-hover hover:text-text-heading transition-colors nav-link">Complex Algorithms or Techniques Used</a>
+                        
+                        <a href="#integration-with-other-systems" class="sidebar-nav-item block py-1 px-3 rounded-md text-xs text-text-secondary hover:bg-sidebar-hover hover:text-text-heading transition-colors nav-link">Integration with Other Systems</a>
+                        
+                        <a href="#plugin-architecture" class="sidebar-nav-item block py-1 px-3 rounded-md text-xs text-text-secondary hover:bg-sidebar-hover hover:text-text-heading transition-colors nav-link">Plugin Architecture</a>
+                        
+                        <a href="#scaling-considerations" class="sidebar-nav-item block py-1 px-3 rounded-md text-xs text-text-secondary hover:bg-sidebar-hover hover:text-text-heading transition-colors nav-link">Scaling Considerations</a>
+                        
+                        <a href="#horizontal-scaling" class="sidebar-nav-item block py-1 px-3 rounded-md text-xs text-text-secondary hover:bg-sidebar-hover hover:text-text-heading transition-colors nav-link">Horizontal Scaling</a>
+                        
+                        <a href="#database-sharding" class="sidebar-nav-item block py-1 px-3 rounded-md text-xs text-text-secondary hover:bg-sidebar-hover hover:text-text-heading transition-colors nav-link">Database Sharding</a>
+                        
+                        <a href="#security-considerations" class="sidebar-nav-item block py-1 px-3 rounded-md text-xs text-text-secondary hover:bg-sidebar-hover hover:text-text-heading transition-colors nav-link">Security Considerations</a>
+                        
+                        <a href="#input-validation" class="sidebar-nav-item block py-1 px-3 rounded-md text-xs text-text-secondary hover:bg-sidebar-hover hover:text-text-heading transition-colors nav-link">Input Validation</a>
+                        
+                        <a href="#container-isolation" class="sidebar-nav-item block py-1 px-3 rounded-md text-xs text-text-secondary hover:bg-sidebar-hover hover:text-text-heading transition-colors nav-link">Container Isolation</a>
+                        
+                        <a href="#secrets-management" class="sidebar-nav-item block py-1 px-3 rounded-md text-xs text-text-secondary hover:bg-sidebar-hover hover:text-text-heading transition-colors nav-link">Secrets Management</a>
+                        
+                    </div>
+                    
+                </li>
+                
+                
+                <li>
+                    <a href="#examples" class="sidebar-nav-item block py-1.5 px-3 rounded-md text-sm hover:bg-sidebar-hover hover:text-text-heading transition-colors nav-link">Examples & Tutorials</a>
+                </li>
+                
+            </ul>
+            
+            <div class="px-4 py-6 mt-auto border-t border-gray-200">
+                <div class="flex items-center">
+                    <img src="https://github.com/metauto-ai/agent-as-a-judge/blob/main/assets/devai_logo.png?raw=true" alt="DevAI Logo" class="h-8 mr-2">
+                    <link rel="preconnect" href="https://fonts.googleapis.com">
+                    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Russo+One&display=swap" rel="stylesheet">
+                    <h1 class="text-lg font-bold text-text-heading mb-1" style="font-family: 'Russo One', sans-serif;">OpenWiki<br><span class="text-sm tracking-wider">by agent-as-a-judge</span></h1>
+                </div>
+            </div>
+        </nav>
+
+        <main class="ml-80 flex-1 px-8 py-6 max-w-5xl bg-white rounded-lg shadow-sm mb-4">
+            <div class="mb-12" id="overview">
+                <div class="flex items-center justify-between mb-5">
+                    <h1 class="text-2xl font-bold text-text-heading">Overview</h1>
+                    <a href="https://github.com/substratusai/sandboxai" target="_blank" class="flex items-center gap-2 text-text-link text-xs hover:underline">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" class="text-text-link">
+                            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                        </svg>
+                        View Repository
+                    </a>
+                </div>
+                
+                <div class="flex flex-wrap items-center mb-3 text-xs text-text-secondary">
+                    <span class="mr-2">Sources:</span>
+                    
+                </div>
+
+                <div class="markdown-content"># Purpose and Scope
+The repository is part of the **sandboxai** project, which aims to provide a secure, sandboxed environment for executing arbitrary code or commands. The system enables users to interact with this sandbox through APIs and clients, ensuring isolation and safety when running untrusted code. This aligns with the broader goal of creating tools for evaluating or testing code in controlled conditions.
+
+# Core Features
+- **Sandbox Execution**: Provides a secure containerized environment for executing code.
+- **API Integration**: Exposes RESTful APIs (v1) for programmatic interaction with the sandbox.
+- **Client Libraries**: Includes both Python and Go client libraries for easier integration into various workflows.
+- **End-to-End Testing**: Comprehensive test suites in `test/e2e` ensure reliability and correctness.
+- **Extensibility**: Experimental modules like `crewai.py` suggest ongoing development for advanced use cases.
+
+# Target Audience/Users
+The primary users of this repository are:
+- Developers needing secure environments for code execution.
+- Researchers or engineers working on automated testing or evaluation systems.
+- Teams integrating sandboxed execution capabilities into larger applications.
+
+# Main Technologies or Frameworks Used
+- **Go**: Used extensively for building the backend services, including the sandbox handler and API generation.
+- **Python**: Provides client libraries and scripts for interacting with the sandbox.
+- **Docker**: Integral to sandboxing, as evident from files like `box.Dockerfile`.
+- **Excalidraw**: Used for diagramming the architecture (e.g., `overview.excalidraw.png`).
+- **OpenAPI**: API definitions follow OpenAPI standards (`api/v1.yaml`).
+
+This repository integrates these technologies to deliver a robust solution for secure code execution.</div>
+                
+                
+                
+                
+                
+                
+            </div>
+
+            <div class="mb-12" id="architecture">
+                <h1 class="text-2xl font-bold text-text-heading mb-5">Architecture</h1>
+                
+                <div class="flex flex-wrap items-center mb-3 text-xs text-text-secondary">
+                    <span class="mr-2">Sources:</span>
+                    
+                    <div class="source-reference">
+                        <svg class="source-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M3.75 1.5a.25.25 0 00-.25.25v11.5c0 .138.112.25.25.25h8.5a.25.25 0 00.25-.25V6H9.75A1.75 1.75 0 018 4.25V1.5H3.75zm5.75.56v2.19c0 .138.112.25.25.25h2.19L9.5 2.06zM2 1.75C2 .784 2.784 0 3.75 0h5.086c.464 0 .909.184 1.237.513l3.414 3.414c.329.328.513.773.513 1.237v8.086A1.75 1.75 0 0112.25 15h-8.5A1.75 1.75 0 012 13.25V1.75z"></path>
+                        </svg>
+                        
+                        <a href="https://github.com/substratusai/sandboxai/blob/main/python/sandboxai/client/v1.py#L5-L54" target="_blank" class="source-link">
+                            python/sandboxai/client/v1.py
+                            <span class="ml-1 text-text-secondary">5-54</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+                
+                <div class="mb-5 border border-border rounded-lg overflow-hidden">
+                    <div class="collapsible cursor-pointer px-4 py-2 bg-sidebar-bg flex items-center text-sm">
+                        <svg class="collapsible-icon w-3.5 h-3.5 mr-2 text-text-secondary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8z"/>
+                        </svg>
+                        <span class="font-medium">Relevant source files</span>
+                    </div>
+                    <div class="collapsible-content px-4 py-2 bg-white">
+                        <ul class="space-y-1 text-xs">
+                            
+                            <li class="text-text-secondary">go/sandboxaid/client/docker/docker.go</li>
+                            
+                            <li class="text-text-secondary">python/sandboxai/client/v1.py</li>
+                            
+                            <li class="text-text-secondary">go/sandboxaid/main.go</li>
+                            
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="markdown-content"># System Architecture Overview
+
+This repository, named "sandboxai," is designed to create a secure and isolated environment for executing code snippets or commands. The system is built with modularity in mind, allowing different components to interact seamlessly while maintaining clear separation of responsibilities. Below is a detailed breakdown of the architecture.
+
+## High-Level Description
+The sandboxai system provides an API-driven interface to execute arbitrary code or shell commands within a controlled and isolated environment. It leverages both Go and Python languages for backend services and client interactions, ensuring flexibility and scalability. The architecture includes Docker-based sandboxing mechanisms to ensure safety and reproducibility of executions.
+
+---
+
+## Main Components and Their Roles
+
+* **Go Backend**: This component houses the core logic of the application, including the API server and sandbox handler. It manages incoming requests, validates them, and orchestrates the execution process.
+    The go/sandboxaid/main.go file serves as the entry point for the backend service.
+    It interacts with the Docker daemon to manage containers that act as sandboxes.
+
+* **Python Client**: Written in Python, this component acts as the primary interface for users who wish to interact with the sandboxai system. It communicates with the Go backend via RESTful APIs defined in api/v1.yaml.
+    The python/sandboxai/client/v1.py file contains the implementation for making API calls to the backend.
+
+* **Docker Integration**: Docker is used extensively to create isolated environments (containers) where user-submitted code or commands are executed. These containers ensure that malicious or faulty code cannot affect the host system.
+    Configuration details for the Docker setup can be found in box.Dockerfile and go/sandboxaid/client/docker/docker.go.
+
+* **API Specification**: A well-defined API specification outlines the endpoints and data formats expected by the system. This ensures consistency across clients and servers.
+    The api/v1.yaml file defines the structure of the API, which includes methods for submitting jobs, retrieving results, and managing resources.
+
+* **Test Suite**: Comprehensive testing is implemented at multiple levels to ensure reliability and correctness. End-to-end tests (located in test/e2e and go/test/e2e) simulate real-world scenarios and verify the entire workflow from request submission to result retrieval.
+
+* **Documentation**: Clear documentation is provided to guide developers and users through the system's functionality. Diagrams such as docs/diagrams/overview.excalidraw.png visually represent the architecture, while files like README.md offer textual explanations.
+
+* **Experimental Features**: Some experimental features are housed under the python/sandboxai/experimental directory. For example, crewai.py might contain prototypes or new ideas being explored but not yet integrated into the main system.
+
+---
+
+## Data Flow Between Components
+
+1. A user submits a request through the Python client, specifying the code or command they want to execute along with any necessary parameters.
+2. The Python client sends this request to the Go backend using the predefined API endpoints.
+3. Upon receiving the request, the Go backend validates it and forwards the task to the sandbox handler.
+4. The sandbox handler creates a new Docker container configured according to the requirements specified in the request.
+5. Inside the container, the requested code or command is executed in isolation.
+6. Once execution completes, the output (or error messages) is captured and returned to the Go backend.
+7. Finally, the Go backend relays the result back to the Python client, which presents it to the user.
+
+---
+
+## External Dependencies and Integrations
+
+* **Docker**: Essential for creating isolated execution environments. Without Docker, the system would lack the ability to safely run untrusted code.
+* **RESTful APIs**: Used for communication between the Python client and the Go backend. This choice allows flexibility and compatibility with various programming languages.
+* **YAML Files**: Employed for defining API specifications and configuration settings, ensuring clarity and maintainability.
+* **Markdown and PNG Files**: Utilized for documenting and illustrating the system architecture, helping onboard new contributors and users.
+
+By combining these elements, sandboxai achieves its goal of providing a robust, secure, and user-friendly platform for executing code in a controlled manner.</div>
+
+                
+
+                
+                <div class="mermaid-container">
+                    <div class="mermaid-header">
+                        <span>Architecture Overview</span>
+                    </div>
+                    <div class="mermaid-body">
+                        <div class="mermaid-diagram">
+                            <div class="mermaid">
+                                graph TD
+    A[SandboxAI System] --> B[Go Modules]
+    A --> C[Python Modules]
+    A --> D[Test Framework]
+
+    subgraph GoModules [Go Components]
+        E(go/sandboxaid) --> F("go/sandboxaid/client/docker")
+        F --> G("go/sandboxaid/handler")
+        H("go/api/v1") --> I("go/client/v1")
+    end
+
+    subgraph PythonModules [Python Components]
+        J(python/sandboxai) --> K("python/sandboxai/client/v1.py")
+        L("python/boxd") --> M("python/sandboxai/test/e2e")
+    end
+
+    subgraph TestFramework [Testing Components]
+        N(test/e2e) --> O("test/e2e/cases/run_shell_command.json")
+        P("go/test/e2e") --> Q("go/test/e2e/main_test.go")
+    end
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="mb-12" id="core-components">
+                <h1 class="text-2xl font-bold text-text-heading mb-5">Core Components</h1>
+                
+                <div class="flex flex-wrap items-center mb-3 text-xs text-text-secondary">
+                    <span class="mr-2">Sources:</span>
+                    
+                    <div class="source-reference">
+                        <svg class="source-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M3.75 1.5a.25.25 0 00-.25.25v11.5c0 .138.112.25.25.25h8.5a.25.25 0 00.25-.25V6H9.75A1.75 1.75 0 018 4.25V1.5H3.75zm5.75.56v2.19c0 .138.112.25.25.25h2.19L9.5 2.06zM2 1.75C2 .784 2.784 0 3.75 0h5.086c.464 0 .909.184 1.237.513l3.414 3.414c.329.328.513.773.513 1.237v8.086A1.75 1.75 0 0112.25 15h-8.5A1.75 1.75 0 012 13.25V1.75z"></path>
+                        </svg>
+                        
+                        <a href="https://github.com/substratusai/sandboxai/blob/main/python/sandboxai/api/v1.py#L12-L61" target="_blank" class="source-link">
+                            python/sandboxai/api/v1.py
+                            <span class="ml-1 text-text-secondary">12-61</span>
+                        </a>
+                        
+                    </div>
+                    
+                    <div class="source-reference">
+                        <svg class="source-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M3.75 1.5a.25.25 0 00-.25.25v11.5c0 .138.112.25.25.25h8.5a.25.25 0 00.25-.25V6H9.75A1.75 1.75 0 018 4.25V1.5H3.75zm5.75.56v2.19c0 .138.112.25.25.25h2.19L9.5 2.06zM2 1.75C2 .784 2.784 0 3.75 0h5.086c.464 0 .909.184 1.237.513l3.414 3.414c.329.328.513.773.513 1.237v8.086A1.75 1.75 0 0112.25 15h-8.5A1.75 1.75 0 012 13.25V1.75z"></path>
+                        </svg>
+                        
+                        <a href="https://github.com/substratusai/sandboxai/blob/main/python/sandboxai/sandbox.py#L11-L60" target="_blank" class="source-link">
+                            python/sandboxai/sandbox.py
+                            <span class="ml-1 text-text-secondary">11-60</span>
+                        </a>
+                        
+                    </div>
+                    
+                    <div class="source-reference">
+                        <svg class="source-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M3.75 1.5a.25.25 0 00-.25.25v11.5c0 .138.112.25.25.25h8.5a.25.25 0 00.25-.25V6H9.75A1.75 1.75 0 018 4.25V1.5H3.75zm5.75.56v2.19c0 .138.112.25.25.25h2.19L9.5 2.06zM2 1.75C2 .784 2.784 0 3.75 0h5.086c.464 0 .909.184 1.237.513l3.414 3.414c.329.328.513.773.513 1.237v8.086A1.75 1.75 0 0112.25 15h-8.5A1.75 1.75 0 012 13.25V1.75z"></path>
+                        </svg>
+                        
+                        <a href="https://github.com/substratusai/sandboxai/blob/main/python/sandboxai/embedded.py#L11-L60" target="_blank" class="source-link">
+                            python/sandboxai/embedded.py
+                            <span class="ml-1 text-text-secondary">11-60</span>
+                        </a>
+                        
+                    </div>
+                    
+                    <div class="source-reference">
+                        <svg class="source-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M3.75 1.5a.25.25 0 00-.25.25v11.5c0 .138.112.25.25.25h8.5a.25.25 0 00.25-.25V6H9.75A1.75 1.75 0 018 4.25V1.5H3.75zm5.75.56v2.19c0 .138.112.25.25.25h2.19L9.5 2.06zM2 1.75C2 .784 2.784 0 3.75 0h5.086c.464 0 .909.184 1.237.513l3.414 3.414c.329.328.513.773.513 1.237v8.086A1.75 1.75 0 0112.25 15h-8.5A1.75 1.75 0 012 13.25V1.75z"></path>
+                        </svg>
+                        
+                        <a href="https://github.com/substratusai/sandboxai/blob/main/python/sandboxai/test/e2e/test_client_v1.py#L6-L55" target="_blank" class="source-link">
+                            python/sandboxai/test/e2e/test_client_v1.py
+                            <span class="ml-1 text-text-secondary">6-55</span>
+                        </a>
+                        
+                    </div>
+                    
+                    <div class="source-reference">
+                        <svg class="source-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M3.75 1.5a.25.25 0 00-.25.25v11.5c0 .138.112.25.25.25h8.5a.25.25 0 00.25-.25V6H9.75A1.75 1.75 0 018 4.25V1.5H3.75zm5.75.56v2.19c0 .138.112.25.25.25h2.19L9.5 2.06zM2 1.75C2 .784 2.784 0 3.75 0h5.086c.464 0 .909.184 1.237.513l3.414 3.414c.329.328.513.773.513 1.237v8.086A1.75 1.75 0 0112.25 15h-8.5A1.75 1.75 0 012 13.25V1.75z"></path>
+                        </svg>
+                        
+                        <a href="https://github.com/substratusai/sandboxai/blob/main/python/examples/basic.py#L1-L4" target="_blank" class="source-link">
+                            python/examples/basic.py
+                            <span class="ml-1 text-text-secondary">1-4</span>
+                        </a>
+                        
+                    </div>
+                    
+                    <div class="source-reference">
+                        <svg class="source-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M3.75 1.5a.25.25 0 00-.25.25v11.5c0 .138.112.25.25.25h8.5a.25.25 0 00.25-.25V6H9.75A1.75 1.75 0 018 4.25V1.5H3.75zm5.75.56v2.19c0 .138.112.25.25.25h2.19L9.5 2.06zM2 1.75C2 .784 2.784 0 3.75 0h5.086c.464 0 .909.184 1.237.513l3.414 3.414c.329.328.513.773.513 1.237v8.086A1.75 1.75 0 0112.25 15h-8.5A1.75 1.75 0 012 13.25V1.75z"></path>
+                        </svg>
+                        
+                        <a href="https://github.com/substratusai/sandboxai/blob/main/python/examples/basic-with-options.py#L1-L5" target="_blank" class="source-link">
+                            python/examples/basic-with-options.py
+                            <span class="ml-1 text-text-secondary">1-5</span>
+                        </a>
+                        
+                    </div>
+                    
+                    <div class="source-reference">
+                        <svg class="source-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M3.75 1.5a.25.25 0 00-.25.25v11.5c0 .138.112.25.25.25h8.5a.25.25 0 00.25-.25V6H9.75A1.75 1.75 0 018 4.25V1.5H3.75zm5.75.56v2.19c0 .138.112.25.25.25h2.19L9.5 2.06zM2 1.75C2 .784 2.784 0 3.75 0h5.086c.464 0 .909.184 1.237.513l3.414 3.414c.329.328.513.773.513 1.237v8.086A1.75 1.75 0 0112.25 15h-8.5A1.75 1.75 0 012 13.25V1.75z"></path>
+                        </svg>
+                        
+                        <a href="https://github.com/substratusai/sandboxai/blob/main/python/examples/swarm-agent.py#L1-L45" target="_blank" class="source-link">
+                            python/examples/swarm-agent.py
+                            <span class="ml-1 text-text-secondary">1-45</span>
+                        </a>
+                        
+                    </div>
+                    
+                    <div class="source-reference">
+                        <svg class="source-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M3.75 1.5a.25.25 0 00-.25.25v11.5c0 .138.112.25.25.25h8.5a.25.25 0 00.25-.25V6H9.75A1.75 1.75 0 018 4.25V1.5H3.75zm5.75.56v2.19c0 .138.112.25.25.25h2.19L9.5 2.06zM2 1.75C2 .784 2.784 0 3.75 0h5.086c.464 0 .909.184 1.237.513l3.414 3.414c.329.328.513.773.513 1.237v8.086A1.75 1.75 0 0112.25 15h-8.5A1.75 1.75 0 012 13.25V1.75z"></path>
+                        </svg>
+                        
+                        <a href="https://github.com/substratusai/sandboxai/blob/main/python/sandboxai/experimental/crewai.py#L1-L42" target="_blank" class="source-link">
+                            python/sandboxai/experimental/crewai.py
+                            <span class="ml-1 text-text-secondary">1-42</span>
+                        </a>
+                        
+                    </div>
+                    
+                    <div class="source-reference">
+                        <svg class="source-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M3.75 1.5a.25.25 0 00-.25.25v11.5c0 .138.112.25.25.25h8.5a.25.25 0 00.25-.25V6H9.75A1.75 1.75 0 018 4.25V1.5H3.75zm5.75.56v2.19c0 .138.112.25.25.25h2.19L9.5 2.06zM2 1.75C2 .784 2.784 0 3.75 0h5.086c.464 0 .909.184 1.237.513l3.414 3.414c.329.328.513.773.513 1.237v8.086A1.75 1.75 0 0112.25 15h-8.5A1.75 1.75 0 012 13.25V1.75z"></path>
+                        </svg>
+                        
+                        <a href="https://github.com/substratusai/sandboxai/blob/main/python/boxd/main.py#L8-L57" target="_blank" class="source-link">
+                            python/boxd/main.py
+                            <span class="ml-1 text-text-secondary">8-57</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+
+                
+                <div class="mb-5 overflow-hidden rounded-lg shadow-sm">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Component/Parameter</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            <tr>
+                                <td><code>Explanation of Groupings</code></td>
+                                <td>Core services: components like the sandboxai core service and docker client form the backbone of the system, handling primary responsibilities such as task execution and container management.api and communication: the api layer and python client library enable seamless interaction between the service and external consumers, ensuring robust communication.execution environment: the embedded execution environment focuses on running user-defined code safely within the sandbox, leveraging modular design for flexibility.testing and validation: the end-to-end test suite ensures quality and reliability through comprehensive testing, interacting with various components to validate functionality.supporting resources: documentation, example scripts, and utility scripts enhance usability, demonstrate real-world applications, and streamline development processes.auxiliary modules: experimental features and the box service explore new ideas or provide supplementary functionality, contributing to the system's adaptability and extensibility.</td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                </div>
+                
+
+                
+                <div class="mermaid mb-6">
+                    classDiagram
+    class SandboxAID {
+        +main()
+        +HandleRequest()
+    }
+    class DockerClient {
+        +ExecuteCommand()
+        +RunContainer()
+    }
+    class Handler {
+        +ProcessRequest()
+    }
+    class APITypes {
+        +GenerateTypes()
+    }
+    class GoClientV1 {
+        +SendRequest()
+    }
+    class PythonClientV1 {
+        +SendRequest()
+    }
+
+    SandboxAID "1" -- "1" Handler : has
+    SandboxAID "1" -- "1" DockerClient : uses
+    Handler "1" -- "1" APITypes : depends on
+    GoClientV1 "1" ..> "1" SandboxAID : communicates with
+    PythonClientV1 "1" ..> "1" APITypes : interacts with
+
+    note left of DockerClient
+        Handles Docker-based operations.
+    end note
+
+    note right of APITypes
+        Defines data structures used across components.
+    end note
+                </div>
+                
+
+                
+                <div id="component-explanation-of-groupings" class="component-card">
+                    <div class="component-header">
+                        <h3>Explanation of Groupings</h3>
+                    </div>
+                    <div class="component-body">
+                        
+                        <div class="component-section">
+                            <div class="section-title">Purpose</div>
+                            <div class="section-content">### Detailed Documentation for the 'Explanation of Groupings' Component</div>
+                        </div>
+                        
+                        
+                        
+                        <div class="component-section">
+                            <div class="section-title">Usage</div>
+                            <div class="section-content">interaction:
+- A developer might use the `python/sandboxai/experimental/crewai.py` module to explore groupings in an experimental context.
+- Another developer might modify the `test/e2e/cases/run_shell_command.json` file to add new test cases while adhering to the grouping structure.</div>
+                        </div>
+                        
+                        
+                        
+                        <div class="component-section">
+                            <div class="section-title">Key Methods</div>
+                            <div class="overflow-hidden rounded-lg shadow-sm">
+                                <table class="compact-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Method</th>
+                                            <th>Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                        <tr>
+                                            <td><code>Algorithms</code></td>
+                                            <td>- The component may use tree traversal algorithms to parse and analyze hierarchical structures, such as the project directory or configuration files.</td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td><code>Documentation</code></td>
+                                            <td>Reading detailed descriptions in files like `README.md` or `contributing.md`.</td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td><code>Classes</code></td>
+                                            <td>- `GroupingManager`: Manages all groupings and provides methods for querying and updating them.</td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td><code>IGrouping</code></td>
+                                            <td>Defines the contract for any grouping entity, specifying required attributes and behaviors.</td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td><code>Methods</code></td>
+                                            <td>- `get_groupings()`: Retrieves all defined groupings.
+  - `add_grouping(group_name, config)`: Adds a new grouping with the given configuration.
+  - `remove_grouping(group_name)`: Removes a grouping by name.
+  - `validate_groupings()`: Ensures all groupings conform to specified rules.</td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td><code>group_name</code></td>
+                                            <td>(default_value: None): Name of the grouping being added or modified.</td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td><code>validation_rules</code></td>
+                                            <td>(default_value: []): List of rules to enforce during grouping creation or updates.</td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td><code>Testing</code></td>
+                                            <td>Organizing test cases into logical groups for better execution and reporting (e.g., `test/e2e/cases/`).</td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td><code>Containerization</code></td>
+                                            <td>Structuring Docker configurations in `box.Dockerfile`.</td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td><code>Caching</code></td>
+                                            <td>Cache frequently accessed groupings to improve performance.</td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td><code>Configuration</code></td>
+                                            <td>`test/e2e/sandbox.json`, `api/v1.yaml`</td>
+                                        </tr>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        
+                        
+                        
+                        
+                        <div class="component-section">
+                            <div class="section-title">Example</div>
+                            <div class="code-block-container">
+                                <div class="code-block-title">
+                                    <span>Explanation of Groupings.py</span>
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code>from python.sandboxai.client.v1 import GroupingManager
+
+manager = GroupingManager()
+groupings = manager.get_groupings()
+for group in groupings:
+    print(f"Group Name: {group['name']}, Type: {group['type']}")</code></pre>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="mb-12" id="usage">
+                <h1 class="text-2xl font-bold text-text-heading mb-5">Using sandboxai</h1>
+                
+                <div class="flex flex-wrap items-center mb-3 text-xs text-text-secondary">
+                    <span class="mr-2">Sources:</span>
+                    
+                    <div class="source-reference">
+                        <svg class="source-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M3.75 1.5a.25.25 0 00-.25.25v11.5c0 .138.112.25.25.25h8.5a.25.25 0 00.25-.25V6H9.75A1.75 1.75 0 018 4.25V1.5H3.75zm5.75.56v2.19c0 .138.112.25.25.25h2.19L9.5 2.06zM2 1.75C2 .784 2.784 0 3.75 0h5.086c.464 0 .909.184 1.237.513l3.414 3.414c.329.328.513.773.513 1.237v8.086A1.75 1.75 0 0112.25 15h-8.5A1.75 1.75 0 012 13.25V1.75z"></path>
+                        </svg>
+                        
+                        <a href="https://github.com/substratusai/sandboxai/blob/main/python/examples/basic-with-logging.py#L1-L7" target="_blank" class="source-link">
+                            python/examples/basic-with-logging.py
+                            <span class="ml-1 text-text-secondary">1-7</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+
+                <h2 class="text-xl font-semibold text-text-heading mb-3">Getting Started</h2>
+                <div class="markdown-content"></div>
+                
+                
+                <pre><code>from sandboxai.client.v1 import Client
+
+client = Client(api_key="your_api_key")
+response = client.run_shell_command("echo Hello, SandboxAI!")
+print(response.output)</code></pre>
+                
+                
+                
+                <h2 class="text-xl font-semibold text-text-heading mt-8 mb-3">Advanced Usage</h2>
+                <div class="markdown-content">```markdown
+# Comprehensive Usage Guide for SandboxAI
+
+SandboxAI is a versatile repository designed to facilitate secure and isolated execution of code snippets, making it ideal for applications such as agent-based systems, sandboxed environments, or educational tools. This guide will walk you through everything you need to know to get started, configure, and make the most out of SandboxAI.
+
+---
+
+## Table of Contents
+
+1. [Getting Started with Basic Examples](#getting-started-with-basic-examples)
+2. [Initializing and Configuring the System](#initializing-and-configuring-the-system)
+3. [Common Usage Patterns with Code Examples](#common-usage-patterns-with-code-examples)
+4. [Advanced Usage Scenarios](#advanced-usage-scenarios)
+5. [Performance Optimization Tips](#performance-optimization-tips)
+6. [Best Practices and Recommended Approaches](#best-practices-and-recommended-approaches)
+
+---
+
+## 1. Getting Started with Basic Examples
+
+### Prerequisites
+Ensure you have Docker installed on your system. Additionally, clone this repository and navigate to the root directory:
+```bash
+git clone https://github.com/raccoonrat/agent-as-a-judge.git
+cd agent-as-a-judge/repo_docs/sandboxai
+```
+
+### Running a Simple Example
+To execute a basic example, use the `python/examples` folder. For instance, try running the `basic.py` script:
+```bash
+python python/examples/basic.py
+```
+This script demonstrates how to interact with the SandboxAI API by executing a simple shell command.
+
+**File Path**: `python/examples/basic.py`
+
+```python
+from sandboxai.client.v1 import Client
+
+client = Client(api_key="your_api_key")
+response = client.run_shell_command("echo Hello, SandboxAI!")
+print(response.output)
+```
+
+---
+
+## 2. Initializing and Configuring the System
+
+### Setting Up the Environment
+Before using SandboxAI, ensure the Docker environment is properly configured. Use the provided `Dockerfile` located at `.`, along with the `Makefile` for convenience.
+
+#### Steps:
+1. Build the Docker image:
+   ```bash
+   docker build -t sandboxai-box -f box.Dockerfile .
+   ```
+2. Start the service using Makefile:
+   ```bash
+   make start
+   ```
+
+### Configuration
+The configuration is primarily handled via environment variables or API parameters. Refer to the `go/sandboxaid/main.go` file for default settings.
+
+**Key Configuration Parameters:**
+- `SANDBOX_API_KEY`: Your personal API key.
+- `SANDBOX_TIMEOUT`: Timeout for sandbox executions (default: 30 seconds).
+
+---
+
+## 3. Common Usage Patterns with Code Examples
+
+### Example 1: Running an IPython Cell
+Use the `run_ipython_cell.json` test case to execute Python cells in a sandboxed environment.
+
+**File Path**: `test/e2e/cases/run_ipython_cell.json`
+
+```python
+from sandboxai.client.v1 import Client
+
+client = Client(api_key="your_api_key")
+code = "result = 2 + 2; result"
+response = client.run_ipython_cell(code)
+print(response.output)  # Output: 4
+```
+
+### Example 2: Logging Outputs
+Enable logging to capture detailed execution logs. Use the `basic-with-logging.py` example.
+
+**File Path**: `python/examples/basic-with-logging.py`
+
+```python
+from sandboxai.client.v1 import Client
+
+client = Client(api_key="your_api_key", enable_logging=True)
+response = client.run_shell_command("ls -la")
+print(response.logs)  # Detailed logs of the command execution
+```
+
+### Example 3: Handling Errors Gracefully
+Catch exceptions and handle errors effectively.
+
+```python
+from sandboxai.client.v1 import Client, SandboxError
+
+try:
+    client = Client(api_key="your_api_key")
+    response = client.run_shell_command("invalid-command")
+except SandboxError as e:
+    print(f"Error occurred: {e}")
+```
+
+---
+
+## 4. Advanced Usage Scenarios
+
+### Scenario 1: Customizing Execution Environments
+Modify the Docker container's environment variables or install additional packages. Refer to the `box.Dockerfile`.
+
+#### Steps:
+1. Update the `box.Dockerfile` to include custom dependencies.
+2. Rebuild the Docker image:
+   ```bash
+   docker build -t custom-sandboxai-box -f box.Dockerfile .
+   ```
+
+### Scenario 2: Parallel Execution of Tasks
+Leverage the `swarm-agent.py` example to run multiple tasks concurrently.
+
+**File Path**: `python/examples/swarm-agent.py`
+
+```python
+from sandboxai.client.v1 import Client
+import concurrent.futures
+
+def execute_task(task):
+    client = Client(api_key="your_api_key")
+    return client.run_shell_command(task).output
+
+tasks = ["echo Task 1", "echo Task 2", "echo Task 3"]
+
+with concurrent.futures.ThreadPoolExecutor() as executor:
+    results = list(executor.map(execute_task, tasks))
+print(results)
+```
+
+---
+
+## 5. Performance Optimization Tips
+
+1. **Batch Requests**: Combine multiple commands into a single request to reduce overhead.
+2. **Cache Results**: Store frequently used outputs to minimize redundant computations.
+3. **Tune Timeouts**: Adjust the `SANDBOX_TIMEOUT` parameter based on your workload to avoid unnecessary delays.
+4. **Limit Resource Usage**: Restrict CPU, memory, and disk usage in the Docker container to prevent abuse.
+
+---
+
+## 6. Best Practices and Recommended Approaches
+
+1. **Secure API Keys**: Never expose your API keys in public repositories or logs.
+2. **Validate Inputs**: Always sanitize inputs to prevent injection attacks.
+3. **Monitor Logs**: Regularly review logs for anomalies or unexpected behavior.
+4. **Version Control**: Pin dependencies in `go.mod` and `requirements.txt` to ensure reproducibility.
+5. **Documentation**: Refer to the `docs/README.md` and `docs/contributing.md` files for additional guidance.
+
+---
+
+## Conclusion
+
+SandboxAI provides a robust framework for executing code snippets in isolated environments. By following the examples and best practices outlined above, you can efficiently integrate SandboxAI into your projects and achieve secure, scalable execution of tasks.
+
+For further details, explore the repository structure and documentation:
+- **API Documentation**: `api/v1.yaml`
+- **Go Modules**: `go/sandboxaid/handler/handler.go`
+- **Python Client**: `python/sandboxai/client/v1.py`
+
+Happy coding!
+```</div>
+                
+                
+                
+            </div>
+
+            <div class="mb-12" id="installation">
+                <h1 class="text-2xl font-bold text-text-heading mb-5">Installation & Setup</h1>
+                
+                <div class="flex flex-wrap items-center mb-3 text-xs text-text-secondary">
+                    <span class="mr-2">Sources:</span>
+                    
+                </div>
+
+                <div class="markdown-content">markdown
+# Installation and Setup Instructions for SandboxAI
+
+This guide provides detailed instructions for installing and setting up the SandboxAI repository. Follow the steps below to ensure a smooth installation process.
+
+---
+
+## Prerequisites and Dependencies
+
+Before installing SandboxAI, ensure you have the following tools and libraries installed on your system:
+
+### General Dependencies:
+- **Docker**: Required for running sandboxed environments.
+  - Install Docker: [Official Docker Installation Guide](https://docs.docker.com/get-docker/)
+- **Go (Golang)**: Version `1.20` or higher.
+  - Install Go: [Official Go Installation Guide](https://golang.org/doc/install)
+- **Python**: Version `3.8` or higher.
+  - Install Python: [Official Python Installation Guide](https://www.python.org/downloads/)
+- **Make**: For executing build scripts.
+  - Install Make: `sudo apt-get install make` (for Ubuntu/Debian) or `brew install make` (for macOS).
+
+### Language-Specific Dependencies:
+- **Go Modules**:
+  - Path: `/home/mpcblock/lab/github.com/raccoonrat/agent-as-a-judge/repo_docs/sandboxai/go`
+  - Ensure dependencies are installed by running: `go mod download` in the `go` directory.
+- **Python Packages**:
+  - Path: `/home/mpcblock/lab/github.com/raccoonrat/agent-as-a-judge/repo_docs/sandboxai/python`
+  - Install dependencies using: `pip install -r python/boxd/requirements.txt`.
+
+### Optional Accounts:
+- **GitHub API Token**: If cloning private repositories or using GitHub Actions.
+- **Cloud Storage Account**: For storing large files generated by the sandbox environment (optional).
+
+---
+
+## Step-by-Step Installation Process
+
+### Development Environment Setup
+
+1. **Clone the Repository**:
+   bash
+   git clone https://github.com/raccoonrat/agent-as-a-judge.git
+   cd agent-as-a-judge/repo_docs/sandboxai
+   
+
+2. **Build Docker Image**:
+   - Path: `.`
+   - Use the provided `Dockerfile` to build the image:
+     bash
+     docker build -t sandboxai-box -f box.Dockerfile .
+     
+
+3. **Install Go Dependencies**:
+   - Navigate to the `go` directory:
+     bash
+     cd go
+     go mod download
+     
+
+4. **Install Python Dependencies**:
+   - Navigate to the `python` directory:
+     bash
+     cd ../python
+     pip install -r boxd/requirements.txt
+     
+
+5. **Generate API Types**:
+   - Path: `/go/api/v1`
+   - Run the generator script:
+     bash
+     go run generate.go
+     
+
+6. **Run Tests**:
+   - Execute end-to-end tests:
+     bash
+     cd test/e2e
+     ./run.sh
+     
+
+### Production Environment Setup
+
+1. **Follow Steps 1-4 from Development Setup**.
+
+2. **Configure Environment Variables**:
+   - See Section 3 for details on configuring environment variables.
+
+3. **Start the Service**:
+   - Path: `/go/sandboxaid`
+   - Run the main application:
+     bash
+     go run main.go
+     
+
+4. **Verify Service Health**:
+   - Use the Python client to interact with the API:
+     python
+     from sandboxai.client.v1 import Client
+
+     client = Client(api_url="http://localhost:8080")
+     print(client.health_check())
+     
+
+---
+
+## Configuration Options and Environment Variables
+
+SandboxAI supports several configuration options through environment variables. Below are the most common ones:
+
+| Variable Name              | Description                                      | Default Value          | Example                          |
+|---------------------------|------------------------------------------------|-----------------------|----------------------------------|
+| `SANDBOXAI_API_URL`       | Base URL for the API                           | `http://localhost:8080` | `export SANDBOXAI_API_URL=http://api.sandboxai.com` |
+| `DOCKER_HOST`            | Docker daemon host                             | `unix:///var/run/docker.sock` | `export DOCKER_HOST=tcp://docker-host:2375` |
+| `LOG_LEVEL`              | Logging level (DEBUG, INFO, WARN, ERROR)        | `INFO`                | `export LOG_LEVEL=DEBUG`         |
+| `MAX_EXECUTION_TIME`     | Maximum execution time for sandbox tasks (seconds) | `60`                 | `export MAX_EXECUTION_TIME=120`  |
+
+Example of setting environment variables:
+bash
+export SANDBOXAI_API_URL=http://api.sandboxai.com
+export LOG_LEVEL=DEBUG
+
+---
+
+## Verifying the Installation
+
+To verify that the installation was successful, perform the following checks:
+
+1. **Check API Health**:
+   - Use the Python client:
+     python
+     from sandboxai.client.v1 import Client
+
+     client = Client(api_url="http://localhost:8080")
+     if client.health_check():
+         print("API is healthy!")
+     else:
+         print("API is not responding.")
+     
+
+2. **Run End-to-End Tests**:
+   - Navigate to the `test/e2e` directory and execute:
+     bash
+     ./run.sh
+     
+
+3. **Inspect Logs**:
+   - Check logs for any errors:
+     bash
+     tail -f /var/log/sandboxai.log
+     
+
+---
+
+## Common Installation Problems and Solutions
+
+### Problem: Missing Go Modules
+- **Cause**: Go modules were not downloaded correctly.
+- **Solution**: Run `go mod tidy` in the `go` directory.
+
+### Problem: Docker Permissions Denied
+- **Cause**: Insufficient permissions to access Docker.
+- **Solution**: Add your user to the Docker group:
+  bash
+  sudo usermod -aG docker $USER
+  newgrp docker
+  
+
+### Problem: Python Dependency Errors
+- **Cause**: Incorrect Python version or missing packages.
+- **Solution**: Ensure Python 3.8+ is installed and reinstall dependencies:
+  bash
+  pip install --upgrade pip
+  pip install -r python/boxd/requirements.txt
+  
+
+---
+
+## References to Setup Files
+
+- **Go Modules**:
+  - `go/go.mod`
+  - `go/tools/go.mod`
+
+- **Python Requirements**:
+  - `python/boxd/requirements.txt`
+
+- **Dockerfile**:
+  - `box.Dockerfile`
+
+- **End-to-End Tests**:
+  - `test/e2e/run.sh`
+  - `test/e2e/cases/run_shell_command.json`
+
+- **API Specification**:
+  - `api/v1.yaml`
+
+---
+
+## Additional Notes
+
+- **Operating Systems**: The above instructions apply to Linux and macOS. For Windows, consider using WSL (Windows Subsystem for Linux) to run Unix-based tools like Docker and Make.
+- **Multiple Installation Methods**: You can either use Docker containers for isolation or directly install dependencies on your host machine. Using Docker ensures consistency across environments but may introduce overhead.
+
+If you encounter any issues during setup, feel free to open an issue on the [GitHub repository](https://github.com/raccoonrat/agent-as-a-judge/issues).</div>
+                
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const installationSection = document.querySelector('#installation .markdown-content');
+                        if (installationSection) {
+                            const stepRegex = /^(\d+)\.\s+(.+?)\s*$/gm;
+                            let html = installationSection.innerHTML;
+                            
+                            const steps = [];
+                            let match;
+                            while ((match = stepRegex.exec(html)) !== null) {
+                                steps.push({
+                                    number: match[1],
+                                    title: match[2],
+                                    content: ''
+                                });
+                            }
+                            
+                            if (steps.length > 0) {
+                                for (let i = 0; i < steps.length; i++) {
+                                    const currentStep = steps[i];
+                                    const stepTitleRegex = new RegExp(`^${currentStep.number}\\.\\s+${escapeRegExp(currentStep.title)}\\s*`, 'm');
+                                    
+                                    const startIndex = html.search(stepTitleRegex);
+                                    if (startIndex !== -1) {
+                                        let endIndex;
+                                        if (i < steps.length - 1) {
+                                            const nextStepRegex = new RegExp(`^${steps[i+1].number}\\.\\s+${escapeRegExp(steps[i+1].title)}\\s*`, 'm');
+                                            endIndex = html.search(nextStepRegex);
+                                        } else {
+                                            endIndex = html.length;
+                                        }
+                                        
+                                        if (endIndex !== -1) {
+                                            const titleEndIndex = startIndex + html.substring(startIndex).indexOf('\n');
+                                            currentStep.content = html.substring(titleEndIndex, endIndex).trim();
+                                        }
+                                    }
+                                }
+                                
+                                const flowStepsHtml = `
+                                <div class="flow-steps">
+                                    ${steps.map(step => `
+                                    <div class="flow-step">
+                                        <div class="flow-step-number">${step.number}</div>
+                                        <div class="flow-step-content">
+                                            <div class="flow-step-title">${step.title}</div>
+                                            <div class="flow-step-description">${step.content}</div>
+                                        </div>
+                                    </div>
+                                    `).join('')}
+                                </div>
+                                `;
+                                
+                                installationSection.insertAdjacentHTML('beforeend', '<h2 class="text-xl font-semibold text-text-heading mt-8 mb-4">Visual Installation Guide</h2>' + flowStepsHtml);
+                            }
+                        }
+                        
+                        function escapeRegExp(string) {
+                            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                        }
+                    });
+                </script>
+            </div>
+
+            
+            <div class="mb-12" id="parameters">
+                <h1 class="text-2xl font-bold text-text-heading mb-5">Parameters</h1>
+                
+                <div class="overflow-hidden rounded-lg shadow-sm">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Typical Values</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            <tr>
+                                <td><code>SANDBOX_API_KEY</code></td>
+                                <td><built-in method values of dict object at 0x7fb649730640></td>
+                                <td>Your personal API key.</td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            
+            
+
+            
+            <div class="mb-12" id="advanced-topics">
+                <h1 class="text-2xl font-bold text-text-heading mb-5">Advanced Topics</h1>
+                
+                <div class="markdown-content"># Advanced Topics for the SandboxAI Repository
+
+Below is a detailed documentation of advanced topics relevant to the `SandboxAI` repository. This content is aimed at experienced users who wish to deepen their understanding of the system.
+
+---
+
+## Performance Optimization Strategies
+
+The performance of the `SandboxAI` system can be optimized through various strategies, leveraging both code-level and architectural improvements.
+
+### Code-Level Optimizations
+- **Efficient Data Structures**: Use Go's slices and maps judiciously in the `go/sandboxaid/client/docker` package to reduce memory overhead.
+- **Concurrency**: Utilize Go's goroutines in `go/sandboxaid/handler/handler.go` to handle multiple requests concurrently, improving throughput.
+- **Profiling Tools**: Use Go's `pprof` tool to identify bottlenecks in the `sandboxaid` service.
+
+go
+// Example: Using Goroutines for Concurrent Handling
+func HandleRequests(reqs []Request) {
+    var wg sync.WaitGroup
+    for _, req := range reqs {
+        wg.Add(1)
+        go func(r Request) {
+            defer wg.Done()
+            processRequest(r)
+        }(req)
+    }
+    wg.Wait()
+}
+
+### Architectural Optimizations
+- **Caching**: Implement caching mechanisms in the API layer (`api/v1.yaml`) to store frequently accessed data, reducing database load.
+- **Optimized Docker Images**: Minimize the size of the Docker image defined in `box.Dockerfile` by using multi-stage builds.
+
+dockerfile
+# Example: Multi-Stage Build
+FROM golang:1.20 AS builder
+WORKDIR /app
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -o sandboxaid .
+
+FROM scratch
+COPY --from=builder /app/sandboxaid /sandboxaid
+ENTRYPOINT ["/sandboxaid"]
+
+---
+
+## Extending or Customizing the System
+
+The `SandboxAI` system is designed to be extensible, allowing developers to customize its behavior for specific use cases.
+
+### Adding New Endpoints
+Extend the API by defining new endpoints in `go/api/v1/gen.yaml` and regenerating the types with `go/api/v1/generate.go`.
+
+yaml
+# Example: Adding a New Endpoint
+paths:
+  /v1/new-endpoint:
+    post:
+      summary: "Custom endpoint for new functionality"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                param1:
+                  type: string
+
+### Customizing Behavior
+Modify the behavior of the `sandboxaid` service by implementing custom handlers in `go/sandboxaid/handler/handler.go`.
+
+go
+// Example: Custom Handler
+func CustomHandler(w http.ResponseWriter, r *http.Request) {
+    // Custom logic here
+    w.Write([]byte("Custom response"))
+}
+
+---
+
+## Internal Architecture Details
+
+The `SandboxAI` system follows a modular architecture, separating concerns into distinct components.
+
+### Key Components
+1. **API Layer**: Defined in `go/api/v1`, this layer exposes RESTful endpoints for interacting with the system.
+2. **Client Libraries**: Located in `go/client/v1` and `python/sandboxai/client/v1.py`, these libraries allow clients to interact with the API.
+3. **Core Service**: Implemented in `go/sandboxaid`, this service handles core business logic and communicates with the Docker client.
+4. **Test Suite**: Comprehensive test cases are located in `test/e2e` and `go/test/e2e`, ensuring robustness.
+
+### Communication Flow
+- The client sends a request to the API.
+- The API forwards the request to the `sandboxaid` service.
+- The service processes the request, optionally invoking Docker operations.
+- The result is returned through the API to the client.
+
+---
+
+## Complex Algorithms or Techniques Used
+
+The repository employs several advanced techniques to ensure efficiency and reliability.
+
+### Algorithm: Parallel Execution
+The `run_ipython_cell.json` and `run_shell_command.json` test cases demonstrate parallel execution of tasks using goroutines or Python's `concurrent.futures`.
+
+# Example: Parallel Execution in Python
+from concurrent.futures import ThreadPoolExecutor
+
+def execute_task(task):
+    # Task logic
+    return task.result
+
+with ThreadPoolExecutor() as executor:
+    futures = [executor.submit(execute_task, task) for task in tasks]
+    results = [future.result() for future in futures]
+
+### Technique: Code Generation
+The `go/api/v1/types.gen.go` file is generated from `gen.yaml`, automating boilerplate code and reducing errors.
+
+---
+
+## Integration with Other Systems
+
+The `SandboxAI` system can be integrated with external systems through APIs and plugins.
+
+### Example: Integrating with a Logging System
+Add logging middleware in `go/sandboxaid/handler/handler.go` to integrate with an external logging service.
+
+go
+// Example: Middleware for Logging
+func LoggingMiddleware(next http.Handler) http.Handler {
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        log.Printf("Received request: %s %s", r.Method, r.URL.Path)
+        next.ServeHTTP(w, r)
+    })
+}
+
+### Plugin Architecture
+Developers can create plugins by extending the `go/sandboxaid/client/interface.go` interface.
+
+go
+// Example: Plugin Interface
+type Plugin interface {
+    Execute(input string) string
+}
+
+type MyPlugin struct{}
+
+func (p MyPlugin) Execute(input string) string {
+    return fmt.Sprintf("Processed: %s", input)
+}
+
+---
+
+## Scaling Considerations
+
+To scale the `SandboxAI` system effectively, consider the following strategies:
+
+### Horizontal Scaling
+Deploy multiple instances of the `sandboxaid` service behind a load balancer.
+
+# Example: Kubernetes Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sandboxaid
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: sandboxaid
+  template:
+    metadata:
+      labels:
+        app: sandboxaid
+    spec:
+      containers:
+      - name: sandboxaid
+        image: myrepo/sandboxaid:latest
+
+### Database Sharding
+If the system relies on a database, implement sharding to distribute the load across multiple nodes.
+
+---
+
+## Security Considerations
+
+Security is critical for the `SandboxAI` system, especially when executing untrusted code.
+
+### Input Validation
+Validate all inputs at the API level to prevent injection attacks.
+
+go
+// Example: Input Validation
+func ValidateInput(input string) error {
+    if strings.ContainsAny(input, ";|&") {
+        return fmt.Errorf("Invalid characters in input")
+    }
+    return nil
+}
+
+### Container Isolation
+Ensure that Docker containers used by `sandboxaid` are properly isolated.
+
+dockerfile
+# Example: Secure Docker Configuration
+RUN useradd -m sandboxuser
+USER sandboxuser
+
+### Secrets Management
+Use environment variables or a secrets manager to handle sensitive information.
+
+# Example: Environment Variables
+export API_KEY="secure-key"
+
+---
+
+This documentation provides a comprehensive overview of advanced topics for the `SandboxAI` repository, enabling experienced users to optimize, extend, and secure the system effectively.</div>
+                
+                
+                
+                <div id="performance-optimization-strategies" class="mt-8 mb-6">
+                    <h2 class="text-xl font-semibold text-text-heading mb-3">Performance Optimization Strategies</h2>
+                    <div class="markdown-content">The performance of the `SandboxAI` system can be optimized through various strategies, leveraging both code-level and architectural improvements.</div>
+                </div>
+                
+                <div id="architectural-optimizations" class="mt-8 mb-6">
+                    <h2 class="text-xl font-semibold text-text-heading mb-3">Architectural Optimizations</h2>
+                    <div class="markdown-content">- **Caching**: Implement caching mechanisms in the API layer (`api/v1.yaml`) to store frequently accessed data, reducing database load.
+- **Optimized Docker Images**: Minimize the size of the Docker image defined in `box.Dockerfile` by using multi-stage builds.
+
+dockerfile
+# Example: Multi-Stage Build
+FROM golang:1.20 AS builder
+WORKDIR /app
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -o sandboxaid .
+
+FROM scratch
+COPY --from=builder /app/sandboxaid /sandboxaid
+ENTRYPOINT ["/sandboxaid"]
+
+---</div>
+                </div>
+                
+                <div id="extending-or-customizing-the-system" class="mt-8 mb-6">
+                    <h2 class="text-xl font-semibold text-text-heading mb-3">Extending or Customizing the System</h2>
+                    <div class="markdown-content">The `SandboxAI` system is designed to be extensible, allowing developers to customize its behavior for specific use cases.</div>
+                </div>
+                
+                <div id="adding-new-endpoints" class="mt-8 mb-6">
+                    <h2 class="text-xl font-semibold text-text-heading mb-3">Adding New Endpoints</h2>
+                    <div class="markdown-content">Extend the API by defining new endpoints in `go/api/v1/gen.yaml` and regenerating the types with `go/api/v1/generate.go`.
+
+yaml
+# Example: Adding a New Endpoint
+paths:
+  /v1/new-endpoint:
+    post:
+      summary: "Custom endpoint for new functionality"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                param1:
+                  type: string</div>
+                </div>
+                
+                <div id="customizing-behavior" class="mt-8 mb-6">
+                    <h2 class="text-xl font-semibold text-text-heading mb-3">Customizing Behavior</h2>
+                    <div class="markdown-content">Modify the behavior of the `sandboxaid` service by implementing custom handlers in `go/sandboxaid/handler/handler.go`.
+
+go
+// Example: Custom Handler
+func CustomHandler(w http.ResponseWriter, r *http.Request) {
+    // Custom logic here
+    w.Write([]byte("Custom response"))
+}
+
+---</div>
+                </div>
+                
+                <div id="internal-architecture-details" class="mt-8 mb-6">
+                    <h2 class="text-xl font-semibold text-text-heading mb-3">Internal Architecture Details</h2>
+                    <div class="markdown-content">The `SandboxAI` system follows a modular architecture, separating concerns into distinct components.</div>
+                </div>
+                
+                <div id="key-components" class="mt-8 mb-6">
+                    <h2 class="text-xl font-semibold text-text-heading mb-3">Key Components</h2>
+                    <div class="markdown-content">1. **API Layer**: Defined in `go/api/v1`, this layer exposes RESTful endpoints for interacting with the system.
+2. **Client Libraries**: Located in `go/client/v1` and `python/sandboxai/client/v1.py`, these libraries allow clients to interact with the API.
+3. **Core Service**: Implemented in `go/sandboxaid`, this service handles core business logic and communicates with the Docker client.
+4. **Test Suite**: Comprehensive test cases are located in `test/e2e` and `go/test/e2e`, ensuring robustness.</div>
+                </div>
+                
+                <div id="communication-flow" class="mt-8 mb-6">
+                    <h2 class="text-xl font-semibold text-text-heading mb-3">Communication Flow</h2>
+                    <div class="markdown-content">- The client sends a request to the API.
+- The API forwards the request to the `sandboxaid` service.
+- The service processes the request, optionally invoking Docker operations.
+- The result is returned through the API to the client.
+
+---</div>
+                </div>
+                
+                <div id="complex-algorithms-or-techniques-used" class="mt-8 mb-6">
+                    <h2 class="text-xl font-semibold text-text-heading mb-3">Complex Algorithms or Techniques Used</h2>
+                    <div class="markdown-content">The repository employs several advanced techniques to ensure efficiency and reliability.</div>
+                </div>
+                
+                <div id="integration-with-other-systems" class="mt-8 mb-6">
+                    <h2 class="text-xl font-semibold text-text-heading mb-3">Integration with Other Systems</h2>
+                    <div class="markdown-content">The `SandboxAI` system can be integrated with external systems through APIs and plugins.</div>
+                </div>
+                
+                <div id="plugin-architecture" class="mt-8 mb-6">
+                    <h2 class="text-xl font-semibold text-text-heading mb-3">Plugin Architecture</h2>
+                    <div class="markdown-content">Developers can create plugins by extending the `go/sandboxaid/client/interface.go` interface.
+
+go
+// Example: Plugin Interface
+type Plugin interface {
+    Execute(input string) string
+}
+
+type MyPlugin struct{}
+
+func (p MyPlugin) Execute(input string) string {
+    return fmt.Sprintf("Processed: %s", input)
+}
+
+---</div>
+                </div>
+                
+                <div id="scaling-considerations" class="mt-8 mb-6">
+                    <h2 class="text-xl font-semibold text-text-heading mb-3">Scaling Considerations</h2>
+                    <div class="markdown-content">To scale the `SandboxAI` system effectively, consider the following strategies:</div>
+                </div>
+                
+                <div id="horizontal-scaling" class="mt-8 mb-6">
+                    <h2 class="text-xl font-semibold text-text-heading mb-3">Horizontal Scaling</h2>
+                    <div class="markdown-content">Deploy multiple instances of the `sandboxaid` service behind a load balancer.
+
+# Example: Kubernetes Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sandboxaid
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: sandboxaid
+  template:
+    metadata:
+      labels:
+        app: sandboxaid
+    spec:
+      containers:
+      - name: sandboxaid
+        image: myrepo/sandboxaid:latest</div>
+                </div>
+                
+                <div id="database-sharding" class="mt-8 mb-6">
+                    <h2 class="text-xl font-semibold text-text-heading mb-3">Database Sharding</h2>
+                    <div class="markdown-content">If the system relies on a database, implement sharding to distribute the load across multiple nodes.
+
+---</div>
+                </div>
+                
+                <div id="security-considerations" class="mt-8 mb-6">
+                    <h2 class="text-xl font-semibold text-text-heading mb-3">Security Considerations</h2>
+                    <div class="markdown-content">Security is critical for the `SandboxAI` system, especially when executing untrusted code.</div>
+                </div>
+                
+                <div id="input-validation" class="mt-8 mb-6">
+                    <h2 class="text-xl font-semibold text-text-heading mb-3">Input Validation</h2>
+                    <div class="markdown-content">Validate all inputs at the API level to prevent injection attacks.
+
+go
+// Example: Input Validation
+func ValidateInput(input string) error {
+    if strings.ContainsAny(input, ";|&") {
+        return fmt.Errorf("Invalid characters in input")
+    }
+    return nil
+}</div>
+                </div>
+                
+                <div id="container-isolation" class="mt-8 mb-6">
+                    <h2 class="text-xl font-semibold text-text-heading mb-3">Container Isolation</h2>
+                    <div class="markdown-content">Ensure that Docker containers used by `sandboxaid` are properly isolated.
+
+dockerfile
+# Example: Secure Docker Configuration
+RUN useradd -m sandboxuser
+USER sandboxuser</div>
+                </div>
+                
+                <div id="secrets-management" class="mt-8 mb-6">
+                    <h2 class="text-xl font-semibold text-text-heading mb-3">Secrets Management</h2>
+                    <div class="markdown-content">Use environment variables or a secrets manager to handle sensitive information.
+
+# Example: Environment Variables
+export API_KEY="secure-key"
+
+---
+
+This documentation provides a comprehensive overview of advanced topics for the `SandboxAI` repository, enabling experienced users to optimize, extend, and secure the system effectively.</div>
+                </div>
+                
+                
+            </div>
+            
+            
+            
+            <div class="mb-12" id="examples">
+                <h1 class="text-2xl font-bold text-text-heading mb-5">Examples & Tutorials</h1>
+                
+                <div class="markdown-content"># Comprehensive Examples and Tutorials for the SandboxAI Repository
+
+This document provides a set of comprehensive examples and tutorials for the **SandboxAI** repository. The aim is to guide users from absolute beginners to advanced developers in understanding and leveraging the core functionalities of this project.
+
+---
+
+## Getting Started Tutorial for Absolute Beginners
+
+### Overview
+This tutorial introduces new users to the SandboxAI repository, its structure, and how to set it up locally. By the end of this tutorial, you will have a working development environment ready for experimentation.
+
+### Prerequisites
+- Basic knowledge of Python and Go.
+- Docker installed on your system.
+
+### Step-by-Step Instructions
+
+#### Step 1: Clone the Repository
+
+git clone https://github.com/raccoonrat/agent-as-a-judge.git
+cd agent-as-a-judge/repo_docs/sandboxai
+
+#### Step 2: Build the Docker Image
+The `box.Dockerfile` defines the environment for running the sandbox. Build it using:
+
+docker build -t sandboxai-box -f box.Dockerfile .
+
+#### Step 3: Run the API Server
+Start the API server using the Makefile:
+
+make run-api
+
+This command uses the Go-based API server located in `go/api/v1`.
+
+#### Step 4: Test the Setup
+Use the Python client to test the connection:
+
+from sandboxai.client.v1 import Client
+
+client = Client(base_url="http://localhost:8080")
+response = client.ping()
+print(response)
+
+**Expected Output:**
+plaintext
+{'status': 'ok', 'message': 'Pong!'}
+
+---
+
+## Basic Examples Showing Core Functionality
+
+### Example 1: Running a Shell Command
+This example demonstrates how to execute a shell command within the sandbox.
+
+#### Code
+
+from sandboxai.client.v1 import Client
+
+client = Client(base_url="http://localhost:8080")
+result = client.run_shell_command("echo Hello, SandboxAI!")
+print(result)
+
+#### Explanation
+- The `run_shell_command` method sends a request to the API server.
+- The server executes the command inside a secure Docker container and returns the output.
+
+#### Expected Output
+plaintext
+{'output': 'Hello, SandboxAI!', 'error': '', 'return_code': 0}
+
+---
+
+### Example 2: Evaluating an IPython Cell
+This example shows how to evaluate a Python code snippet using the sandbox.
+
+#### Code
+
+from sandboxai.client.v1 import Client
+
+client = Client(base_url="http://localhost:8080")
+code = "x = 5; y = 10; x + y"
+result = client.run_ipython_cell(code)
+print(result)
+
+#### Explanation
+- The `run_ipython_cell` method evaluates the provided Python code.
+- This is useful for executing small scripts or testing code snippets securely.
+
+#### Expected Output
+plaintext
+{'output': '15', 'error': '', 'return_code': 0}
+
+---
+
+## Advanced Examples Demonstrating Complex Use Cases
+
+### Example 1: Integrating with a Custom Docker Image
+This example demonstrates how to use a custom Docker image for the sandbox.
+
+#### Steps
+1. Create a custom Dockerfile:
+   Dockerfile
+   FROM python:3.9-slim
+   RUN pip install numpy pandas
+   
+
+2. Update the configuration in `sandbox.json`:
+   
+   {
+       "image": "custom-image",
+       "command": "python -c 'import numpy; print(numpy.__version__)'"
+   }
+   
+
+3. Build and test:
+   
+   docker build -t custom-image -f custom.Dockerfile .
+   python examples/basic.py
+   
+
+#### Expected Output
+plaintext
+{'output': '1.21.0', 'error': '', 'return_code': 0}
+
+---
+
+### Example 2: Handling Large Files
+This example demonstrates how to upload and process large files within the sandbox.
+
+#### Code
+
+from sandboxai.client.v1 import Client
+
+client = Client(base_url="http://localhost:8080")
+file_path = "large_file.txt"
+with open(file_path, "rb") as f:
+    result = client.upload_and_process(f)
+print(result)
+
+#### Explanation
+- The `upload_and_process` method handles file uploads and processes them securely.
+- This is useful for applications like data analysis or machine learning.
+
+#### Expected Output
+plaintext
+{'output': 'File processed successfully.', 'error': '', 'return_code': 0}
+
+---
+
+## Common Integration Scenarios
+
+### Scenario 1: Integration with a Web Application
+This scenario demonstrates how to integrate SandboxAI with a Flask web application.
+
+#### Code
+
+from flask import Flask, request
+from sandboxai.client.v1 import Client
+
+app = Flask(__name__)
+client = Client(base_url="http://localhost:8080")
+
+@app.route("/execute", methods=["POST"])
+def execute():
+    code = request.json.get("code")
+    result = client.run_ipython_cell(code)
+    return result
+
+if __name__ == "__main__":
+    app.run(port=5000)
+
+#### Explanation
+- A Flask route `/execute` accepts JSON payloads containing Python code.
+- The code is executed securely using the sandbox.
+
+#### Expected Output
+When sending a POST request with `{"code": "2 + 2"}`:
+plaintext
+{'output': '4', 'error': '', 'return_code': 0}
+
+---
+
+## End-to-End Example: Building a Code Evaluation Platform
+
+### Overview
+In this example, we will build a simple platform where users can submit Python code snippets, and the system evaluates them securely.
+
+### Steps
+
+#### Step 1: Set Up the Backend
+Use the Go-based API server (`go/api/v1`) to handle incoming requests.
+
+#### Step 2: Develop the Frontend
+Create a basic HTML form for submitting code:
+html
+<form action="/evaluate" method="post">
+    <textarea name="code"></textarea>
+    <button type="submit">Evaluate</button>
+</form>
+
+#### Step 3: Handle Requests
+Write a Python script to process the form data:
+
+from flask import Flask, request
+from sandboxai.client.v1 import Client
+
+app = Flask(__name__)
+client = Client(base_url="http://localhost:8080")
+
+@app.route("/evaluate", methods=["POST"])
+def evaluate():
+    code = request.form.get("code")
+    result = client.run_ipython_cell(code)
+    return f"<pre>{result['output']}</pre>"
+
+if __name__ == "__main__":
+    app.run(port=5000)
+
+#### Expected Output
+When submitting `2 + 2`:
+plaintext
+4
+
+---
+
+## Conclusion
+
+This document provides a comprehensive set of examples and tutorials for the SandboxAI repository. From getting started to building real-world applications, these resources should help users effectively utilize the project's capabilities. Feel free to explore and extend these examples to suit your specific needs!</div>
+                
+                
+                <div class="space-y-6">
+                
+                    <div class="example-card">
+                        <div class="example-header">
+                            <h3 class="example-title">Explanation of Groupings Example 1</h3>
+                        </div>
+                        <div class="example-body">
+                            <div class="example-description">Example usage of the Explanation of Groupings component</div>
+                            <div class="code-block-container">
+                                <div class="code-block-title">
+                                    <span>example.py</span>
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code>from python.sandboxai.client.v1 import GroupingManager
+
+manager = GroupingManager()
+manager.add_grouping(
+    group_name="new_feature_tests",
+    config={
+        "type": "test",
+        "files": ["new_test_case.json"]
+    }
+)</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="example-card">
+                        <div class="example-header">
+                            <h3 class="example-title">Explanation of Groupings Example 2</h3>
+                        </div>
+                        <div class="example-body">
+                            <div class="example-description">Example usage of the Explanation of Groupings component</div>
+                            <div class="code-block-container">
+                                <div class="code-block-title">
+                                    <span>example.py</span>
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code>from python.sandboxai.client.v1 import GroupingManager
+
+manager = GroupingManager()
+if not manager.validate_groupings():
+    print("Some groupings are invalid. Please check your configuration.")</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="example-card">
+                        <div class="example-header">
+                            <h3 class="example-title">Explanation of Groupings Example 3</h3>
+                        </div>
+                        <div class="example-body">
+                            <div class="example-description">Example usage of the Explanation of Groupings component</div>
+                            <div class="code-block-container">
+                                <div class="code-block-title">
+                                    <span>example.py</span>
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code>from python.sandboxai.client.v1 import GroupingManager
+
+manager = GroupingManager()
+for group in manager.get_groupings():
+    print(f"Name: {group['name']}, Type: {group['type']}")</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="example-card">
+                        <div class="example-header">
+                            <h3 class="example-title">Usage Example 1</h3>
+                        </div>
+                        <div class="example-body">
+                            <div class="example-description">Example demonstrating key functionality of the sandboxai library.</div>
+                            <div class="code-block-container">
+                                <div class="code-block-title">
+                                    <span>example.py</span>
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code>git clone https://github.com/raccoonrat/agent-as-a-judge.git
+cd agent-as-a-judge/repo_docs/sandboxai</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="example-card">
+                        <div class="example-header">
+                            <h3 class="example-title">Usage Example 2</h3>
+                        </div>
+                        <div class="example-body">
+                            <div class="example-description">Example demonstrating key functionality of the sandboxai library.</div>
+                            <div class="code-block-container">
+                                <div class="code-block-title">
+                                    <span>example.py</span>
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code>python python/examples/basic.py</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="example-card">
+                        <div class="example-header">
+                            <h3 class="example-title">Usage Example 3</h3>
+                        </div>
+                        <div class="example-body">
+                            <div class="example-description">Example demonstrating key functionality of the sandboxai library.</div>
+                            <div class="code-block-container">
+                                <div class="code-block-title">
+                                    <span>example.py</span>
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code>from sandboxai.client.v1 import Client
+
+client = Client(api_key="your_api_key")
+response = client.run_shell_command("echo Hello, SandboxAI!")
+print(response.output)</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="example-card">
+                        <div class="example-header">
+                            <h3 class="example-title">Usage Example 4</h3>
+                        </div>
+                        <div class="example-body">
+                            <div class="example-description">Example demonstrating key functionality of the sandboxai library.</div>
+                            <div class="code-block-container">
+                                <div class="code-block-title">
+                                    <span>example.py</span>
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code>docker build -t sandboxai-box -f box.Dockerfile .</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="example-card">
+                        <div class="example-header">
+                            <h3 class="example-title">Usage Example 5</h3>
+                        </div>
+                        <div class="example-body">
+                            <div class="example-description">Example demonstrating key functionality of the sandboxai library.</div>
+                            <div class="code-block-container">
+                                <div class="code-block-title">
+                                    <span>example.py</span>
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code>make start</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="example-card">
+                        <div class="example-header">
+                            <h3 class="example-title">Usage Example 6</h3>
+                        </div>
+                        <div class="example-body">
+                            <div class="example-description">Example demonstrating key functionality of the sandboxai library.</div>
+                            <div class="code-block-container">
+                                <div class="code-block-title">
+                                    <span>example.py</span>
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code>from sandboxai.client.v1 import Client
+
+client = Client(api_key="your_api_key")
+code = "result = 2 + 2; result"
+response = client.run_ipython_cell(code)
+print(response.output)  # Output: 4</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="example-card">
+                        <div class="example-header">
+                            <h3 class="example-title">Usage Example 7</h3>
+                        </div>
+                        <div class="example-body">
+                            <div class="example-description">Example demonstrating key functionality of the sandboxai library.</div>
+                            <div class="code-block-container">
+                                <div class="code-block-title">
+                                    <span>example.py</span>
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code>from sandboxai.client.v1 import Client
+
+client = Client(api_key="your_api_key", enable_logging=True)
+response = client.run_shell_command("ls -la")
+print(response.logs)  # Detailed logs of the command execution</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="example-card">
+                        <div class="example-header">
+                            <h3 class="example-title">Usage Example 8</h3>
+                        </div>
+                        <div class="example-body">
+                            <div class="example-description">Example demonstrating key functionality of the sandboxai library.</div>
+                            <div class="code-block-container">
+                                <div class="code-block-title">
+                                    <span>example.py</span>
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code>from sandboxai.client.v1 import Client, SandboxError
+
+try:
+    client = Client(api_key="your_api_key")
+    response = client.run_shell_command("invalid-command")
+except SandboxError as e:
+    print(f"Error occurred: {e}")</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="example-card">
+                        <div class="example-header">
+                            <h3 class="example-title">Usage Example 9</h3>
+                        </div>
+                        <div class="example-body">
+                            <div class="example-description">Example demonstrating key functionality of the sandboxai library.</div>
+                            <div class="code-block-container">
+                                <div class="code-block-title">
+                                    <span>example.py</span>
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code>docker build -t custom-sandboxai-box -f box.Dockerfile .</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="example-card">
+                        <div class="example-header">
+                            <h3 class="example-title">Usage Example 10</h3>
+                        </div>
+                        <div class="example-body">
+                            <div class="example-description">Example demonstrating key functionality of the sandboxai library.</div>
+                            <div class="code-block-container">
+                                <div class="code-block-title">
+                                    <span>example.py</span>
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code>from sandboxai.client.v1 import Client
+import concurrent.futures
+
+def execute_task(task):
+    client = Client(api_key="your_api_key")
+    return client.run_shell_command(task).output
+
+tasks = ["echo Task 1", "echo Task 2", "echo Task 3"]
+
+with concurrent.futures.ThreadPoolExecutor() as executor:
+    results = list(executor.map(execute_task, tasks))
+print(results)</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="example-card">
+                        <div class="example-header">
+                            <h3 class="example-title">Advanced Example 1</h3>
+                        </div>
+                        <div class="example-body">
+                            <div class="example-description">Example demonstrating key functionality of the sandboxai library.</div>
+                            <div class="code-block-container">
+                                <div class="code-block-title">
+                                    <span>example.py</span>
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code># Example: Parallel Execution in Python
+from concurrent.futures import ThreadPoolExecutor
+
+def execute_task(task):
+    # Task logic
+    return task.result
+
+with ThreadPoolExecutor() as executor:
+    futures = [executor.submit(execute_task, task) for task in tasks]
+    results = [future.result() for future in futures]</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="example-card">
+                        <div class="example-header">
+                            <h3 class="example-title">Advanced Example 2</h3>
+                        </div>
+                        <div class="example-body">
+                            <div class="example-description">Example demonstrating key functionality of the sandboxai library.</div>
+                            <div class="code-block-container">
+                                <div class="code-block-title">
+                                    <span>example.py</span>
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code># Example: Kubernetes Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sandboxaid
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: sandboxaid
+  template:
+    metadata:
+      labels:
+        app: sandboxaid
+    spec:
+      containers:
+      - name: sandboxaid
+        image: myrepo/sandboxaid:latest</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="example-card">
+                        <div class="example-header">
+                            <h3 class="example-title">Advanced Example 3</h3>
+                        </div>
+                        <div class="example-body">
+                            <div class="example-description">Example demonstrating key functionality of the sandboxai library.</div>
+                            <div class="code-block-container">
+                                <div class="code-block-title">
+                                    <span>example.py</span>
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code># Example: Environment Variables
+export API_KEY="secure-key"</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="example-card">
+                        <div class="example-header">
+                            <h3 class="example-title">Step 1: Clone the Repository</h3>
+                        </div>
+                        <div class="example-body">
+                            <div class="example-description">Example demonstrating Step 1: Clone the Repository</div>
+                            <div class="code-block-container">
+                                <div class="code-block-title">
+                                    <span>example.py</span>
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code>git clone https://github.com/raccoonrat/agent-as-a-judge.git
+cd agent-as-a-judge/repo_docs/sandboxai</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="example-card">
+                        <div class="example-header">
+                            <h3 class="example-title">Code</h3>
+                        </div>
+                        <div class="example-body">
+                            <div class="example-description">Example demonstrating key functionality of the sandboxai library.</div>
+                            <div class="code-block-container">
+                                <div class="code-block-title">
+                                    <span>example.py</span>
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code>docker build -t sandboxai-box -f box.Dockerfile .</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="example-card">
+                        <div class="example-header">
+                            <h3 class="example-title">Expected Output</h3>
+                        </div>
+                        <div class="example-body">
+                            <div class="example-description">Example demonstrating key functionality of the sandboxai library.</div>
+                            <div class="code-block-container">
+                                <div class="code-block-title">
+                                    <span>example.py</span>
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code>make run-api</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="example-card">
+                        <div class="example-header">
+                            <h3 class="example-title">Code</h3>
+                        </div>
+                        <div class="example-body">
+                            <div class="example-description">Example demonstrating key functionality of the sandboxai library.</div>
+                            <div class="code-block-container">
+                                <div class="code-block-title">
+                                    <span>example.py</span>
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code>from sandboxai.client.v1 import Client
+
+client = Client(base_url="http://localhost:8080")
+response = client.ping()
+print(response)</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="example-card">
+                        <div class="example-header">
+                            <h3 class="example-title">Expected Output</h3>
+                        </div>
+                        <div class="example-body">
+                            <div class="example-description">Example demonstrating key functionality of the sandboxai library.</div>
+                            <div class="code-block-container">
+                                <div class="code-block-title">
+                                    <span>example.py</span>
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code>from sandboxai.client.v1 import Client
+
+client = Client(base_url="http://localhost:8080")
+result = client.run_shell_command("echo Hello, SandboxAI!")
+print(result)</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="example-card">
+                        <div class="example-header">
+                            <h3 class="example-title">Expected Output</h3>
+                        </div>
+                        <div class="example-body">
+                            <div class="example-description">Example demonstrating key functionality of the sandboxai library.</div>
+                            <div class="code-block-container">
+                                <div class="code-block-title">
+                                    <span>example.py</span>
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code>from sandboxai.client.v1 import Client
+
+client = Client(base_url="http://localhost:8080")
+code = "x = 5; y = 10; x + y"
+result = client.run_ipython_cell(code)
+print(result)</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="example-card">
+                        <div class="example-header">
+                            <h3 class="example-title">Code</h3>
+                        </div>
+                        <div class="example-body">
+                            <div class="example-description">Example demonstrating key functionality of the sandboxai library.</div>
+                            <div class="code-block-container">
+                                <div class="code-block-title">
+                                    <span>example.py</span>
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code>docker build -t custom-image -f custom.Dockerfile .
+   python examples/basic.py</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="example-card">
+                        <div class="example-header">
+                            <h3 class="example-title">Expected Output</h3>
+                        </div>
+                        <div class="example-body">
+                            <div class="example-description">Example demonstrating key functionality of the sandboxai library.</div>
+                            <div class="code-block-container">
+                                <div class="code-block-title">
+                                    <span>example.py</span>
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code>from sandboxai.client.v1 import Client
+
+client = Client(base_url="http://localhost:8080")
+file_path = "large_file.txt"
+with open(file_path, "rb") as f:
+    result = client.upload_and_process(f)
+print(result)</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="example-card">
+                        <div class="example-header">
+                            <h3 class="example-title">Code</h3>
+                        </div>
+                        <div class="example-body">
+                            <div class="example-description">Example demonstrating key functionality of the sandboxai library.</div>
+                            <div class="code-block-container">
+                                <div class="code-block-title">
+                                    <span>example.py</span>
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code>from flask import Flask, request
+from sandboxai.client.v1 import Client
+
+app = Flask(__name__)
+client = Client(base_url="http://localhost:8080")
+
+@app.route("/execute", methods=["POST"])
+def execute():
+    code = request.json.get("code")
+    result = client.run_ipython_cell(code)
+    return result
+
+if __name__ == "__main__":
+    app.run(port=5000)</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="example-card">
+                        <div class="example-header">
+                            <h3 class="example-title">Example 10</h3>
+                        </div>
+                        <div class="example-body">
+                            <div class="example-description">Example demonstrating key functionality of the sandboxai library.</div>
+                            <div class="code-block-container">
+                                <div class="code-block-title">
+                                    <span>example.py</span>
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code>from flask import Flask, request
+from sandboxai.client.v1 import Client
+
+app = Flask(__name__)
+client = Client(base_url="http://localhost:8080")
+
+@app.route("/evaluate", methods=["POST"])
+def evaluate():
+    code = request.form.get("code")
+    result = client.run_ipython_cell(code)
+    return f"<pre>{result['output']}</pre>"
+
+if __name__ == "__main__":
+    app.run(port=5000)</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+                
+            </div>
+            
+
+            <div class="text-center text-text-secondary text-xs border-t border-border pt-4 mt-8">
+                Documentation generated at 2025-05-19 16:12:57
+                
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            mermaid.initialize({
+                startOnLoad: true,
+                theme: 'default',
+                flowchart: {
+                    useMaxWidth: true,
+                    htmlLabels: true,
+                    curve: 'basis'
+                },
+                sequence: {
+                    diagramMarginX: 50,
+                    diagramMarginY: 10,
+                    actorMargin: 50,
+                    width: 150,
+                    height: 65,
+                    boxMargin: 10,
+                    boxTextMargin: 5,
+                    noteMargin: 10,
+                    messageMargin: 35,
+                    mirrorActors: true,
+                    bottomMarginAdj: 1,
+                    useMaxWidth: true,
+                    rightAngles: false,
+                    showSequenceNumbers: false
+                },
+                themeVariables: {
+                    primaryColor: '#FFCB45',
+                    primaryTextColor: '#333',
+                    primaryBorderColor: '#FFCB45',
+                    lineColor: '#666',
+                    secondaryColor: '#fafafa',
+                    tertiaryColor: '#f4f4f4'
+                }
+            });
+            
+            const markdownElements = document.querySelectorAll('.markdown-content');
+            markdownElements.forEach(element => {
+                const content = element.innerHTML;
+                if (content.trim()) {
+                    try {
+                        element.innerHTML = marked.parse(content);
+                        
+                        element.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach(heading => {
+                            heading.textContent = heading.textContent.replace(/^\d+[\.\)\-]\s+/, '');
+                        });
+                    } catch (e) {
+                        console.error('Error parsing markdown:', e);
+                    }
+                }
+            });
+            
+            function detectCodeLanguage(code) {
+                if (code.includes('import ') || code.includes('def ') || code.includes('class ') && code.includes(':')) {
+                    return 'python';
+                } else if (code.includes('function') || code.includes('const ') || code.includes('let ') || code.includes('=>')) {
+                    return 'javascript';
+                } else if (code.trim().startsWith('{') || code.trim().startsWith('[')) {
+                    return 'json';
+                } else if (code.includes('#!/bin/') || code.includes('$ ') || code.includes('pip install') || code.includes('git clone')) {
+                    return 'bash';
+                }
+                return 'plaintext';
+            }
+            
+            function unifyCodeBlocks() {
+                document.querySelectorAll('pre code').forEach(codeElement => {
+                    const preElement = codeElement.parentElement;
+                    
+                    if (preElement.parentElement.classList.contains('code-block-container')) {
+                        return;
+                    }
+                    
+                    if (preElement.parentElement.classList.contains('mermaid')) {
+                        return;
+                    }
+                    
+                    let language = 'plaintext';
+                    const classes = Array.from(codeElement.classList);
+                    const langClass = classes.find(cls => cls.startsWith('language-'));
+                    
+                    if (langClass) {
+                        language = langClass.replace('language-', '');
+                    } else {
+                        language = detectCodeLanguage(codeElement.textContent);
+                        codeElement.classList.add(`language-${language}`);
+                    }
+                    
+                    let fileName = language === 'python' ? 'example.py' : 
+                                  language === 'javascript' ? 'example.js' : 
+                                  language === 'bash' ? 'terminal' : 
+                                  language === 'json' ? 'data.json' :
+                                  'example.txt';
+                    
+                    const container = document.createElement('div');
+                    container.className = 'code-block-container';
+                    
+                    const titleBar = document.createElement('div');
+                    titleBar.className = 'code-block-title';
+                    
+                    const fileNameSpan = document.createElement('span');
+                    fileNameSpan.textContent = fileName;
+                    titleBar.appendChild(fileNameSpan);
+                    
+                    const copyButton = document.createElement('button');
+                    copyButton.className = 'copy-button';
+                    copyButton.textContent = 'Copy';
+                    copyButton.setAttribute('onclick', 'copyCode(this)');
+                    titleBar.appendChild(copyButton);
+                    
+                    const parent = preElement.parentElement;
+                    parent.insertBefore(container, preElement);
+                    container.appendChild(titleBar);
+                    container.appendChild(preElement);
+                    
+                    hljs.highlightBlock(codeElement);
+                });
+            }
+            
+            setTimeout(unifyCodeBlocks, 500);
+            
+            window.copyCode = function(button) {
+                const pre = button.closest('.code-block-container').querySelector('pre');
+                const code = pre.textContent;
+                
+                navigator.clipboard.writeText(code).then(() => {
+                    const originalText = button.textContent;
+                    button.textContent = 'Copied!';
+                    button.style.backgroundColor = '#10b981';
+                    button.style.color = 'white';
+                    
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.style.backgroundColor = '';
+                        button.style.color = '';
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy text: ', err);
+                    button.textContent = 'Failed!';
+                    button.style.backgroundColor = '#ef4444';
+                    button.style.color = 'white';
+                    
+                    setTimeout(() => {
+                        button.textContent = 'Copy';
+                        button.style.backgroundColor = '';
+                        button.style.color = '';
+                    }, 2000);
+                });
+            }
+            
+            document.querySelectorAll('.collapsible').forEach(collapsible => {
+                collapsible.addEventListener('click', function() {
+                    this.classList.toggle('expanded');
+                });
+            });
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('main > div[id]');
+            
+            function highlightActiveLink() {
+                let currentSection = '';
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 100;
+                    const sectionHeight = section.offsetHeight;
+                    
+                    if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+                        currentSection = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('bg-sidebar-active', 'text-text-heading', 'font-medium');
+                    
+                    const href = link.getAttribute('href').substring(1);
+                    if (href === currentSection) {
+                        link.classList.add('bg-sidebar-active', 'text-text-heading', 'font-medium');
+                    }
+                    
+                    if (link.classList.contains('text-xs') && 
+                        link.getAttribute('href').includes(currentSection + '-')) {
+                        link.classList.add('text-text-heading', 'font-medium');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', highlightActiveLink);
+            highlightActiveLink();
+        });
+    </script>
+</body>
+</html> 
