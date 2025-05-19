@@ -240,9 +240,9 @@ class DevTextRetrieve:
         inference_time = time.time() - start_time
 
         return {
-            "llm_response": response.choices[0].message["content"],
-            "input_tokens": response.usage.prompt_tokens,
-            "output_tokens": response.usage.completion_tokens,
+            "llm_response": response["choices"][0]["message"]["content"],
+            "input_tokens": response.get("usage", {}).get("prompt_tokens", 0),
+            "output_tokens": response.get("usage", {}).get("completion_tokens", 0),
             "cost": cost,
             # "accumulated_cost": accumulated_cost,
             "inference_time": inference_time,

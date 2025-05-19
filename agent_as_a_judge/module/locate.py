@@ -79,9 +79,9 @@ class DevLocate:
         )
         inference_time = time.time() - start_time
 
-        llm_response = response.choices[0].message["content"]
-        input_token = response.usage.prompt_tokens
-        output_token = response.usage.completion_tokens
+        llm_response = response["choices"][0]["message"]["content"]
+        input_token = response.get("usage", {}).get("prompt_tokens", 0)
+        output_token = response.get("usage", {}).get("completion_tokens", 0)
 
         return {
             "llm_response": llm_response,
