@@ -25,13 +25,14 @@ class DevLocate:
         self.llm = self._initialize_llm()
 
     def _initialize_llm(self) -> LLM:
-        model = os.getenv("DEFAULT_LLM")
-        api_key = os.getenv("OPENAI_API_KEY")
-        if not model or not api_key:
-            raise ValueError(
-                "DEFAULT_LLM or OPENAI_API_KEY not found in environment variables"
-            )
-        return LLM(model=model, api_key=api_key)
+        try:
+            return LLM.from_config()
+        except Exception:
+            model = os.getenv("DEFAULT_LLM")
+            api_key = os.getenv("OPENAI_API_KEY")
+            if not model or not api_key:
+                raise ValueError("DEFAULT_LLM or OPENAI_API_KEY not found in environment variables, and llm_config.yaml 未配置可用模型")
+            return LLM(model=model, api_key=api_key)
 
     def locate_file(self, criteria: str, workspace_info: str) -> dict:
         system_prompt = get_system_prompt_locate(language="English")
