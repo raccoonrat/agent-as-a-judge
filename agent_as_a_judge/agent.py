@@ -50,6 +50,7 @@ class JudgeAgent:
         judge_dir: Path,
         config: AgentConfig,
         trajectory_file: Path = None,
+        llm=None,
     ):
 
         self.workspace = workspace
@@ -57,10 +58,7 @@ class JudgeAgent:
         self.judge_dir = judge_dir
         self.trajectory_file = trajectory_file
         self.config = config
-
-        self.llm = LLM(
-            model=os.getenv("DEFAULT_LLM"), api_key=os.getenv("OPENAI_API_KEY")
-        )
+        self.llm = llm if llm is not None else LLM.from_config()
 
         # Paths for Judge-specific directories and files
         self.judge_workspace = Path(

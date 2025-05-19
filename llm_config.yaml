@@ -1,0 +1,14 @@
+default: qwen-plus
+models:
+  qwen-plus:
+    api_key: ${DASHSCOPE_API_KEY}
+    base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+    provider: qwen
+  openai-gpt4:
+    api_key: ${OPENAI_API_KEY}
+    base_url: https://api.openai.com/v1
+    provider: openai
+  ollama:
+    api_key: ""
+    base_url: http://localhost:11434
+    provider: ollama 

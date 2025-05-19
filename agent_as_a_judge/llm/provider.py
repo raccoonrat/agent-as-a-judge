@@ -4,6 +4,7 @@ from functools import partial
 import os
 from dotenv import load_dotenv
 import requests
+import yaml
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
@@ -50,16 +51,9 @@ class LLM:
     ):
         from agent_as_a_judge.llm.cost import Cost
         self.cost = Cost()
-
-        # 适配 qwen-plus
-        if model and model.startswith("qwen-plus"):
-            if not custom_llm_provider:
-                custom_llm_provider = "qwen"
-            if not base_url:
-                base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1"
-
-        self.model_name = model
-        self.api_key = api_key
+        # 优先使用传入参数，否则用环境变量
+        self.model_name = model or os.getenv("DEFAULT_LLM")
+        self.api_key = api_key or os.getenv("OPENAI_API_KEY")
         self.base_url = base_url
         self.api_version = api_version
         self.max_input_tokens = max_input_tokens
@@ -71,6 +65,22 @@ class LLM:
         self.retry_min_wait = retry_min_wait
         self.retry_max_wait = retry_max_wait
         self.custom_llm_provider = custom_llm_provider
+        # 适配 qwen-plus、ollama、openai 等
+        if self.model_name and self.model_name.startswith("qwen-plus"):
+            if not self.custom_llm_provider:
+                self.custom_llm_provider = "qwen"
+            if not self.base_url:
+                self.base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1"
+        elif self.model_name and self.model_name.startswith("ollama"):
+            if not self.base_url:
+                self.base_url = "http://localhost:11434"
+            if not self.custom_llm_provider:
+                self.custom_llm_provider = "ollama"
+        elif self.model_name and self.model_name.startswith("gpt"):
+            if not self.base_url:
+                self.base_url = "https://api.openai.com/v1"
+            if not self.custom_llm_provider:
+                self.custom_llm_provider = "openai"
 
         self.model_info = None
         try:
@@ -216,6 +226,46 @@ class LLM:
                 },
             ]
         return messages
+
+    @classmethod
+    def from_config(
+        cls,
+        model_name=None,
+        api_key=None,
+        base_url=None,
+        custom_llm_provider=None,
+        config_path="llm_config.yaml"
+    ):
+        # 1. 优先用显式传入参数
+        if model_name and api_key:
+            return cls(model=model_name, api_key=api_key, base_url=base_url, custom_llm_provider=custom_llm_provider)
+        # 2. 查找配置文件
+        try:
+            with open(config_path, "r", encoding="utf-8") as f:
+                config = yaml.safe_load(f)
+            model_key = model_name or config.get("default")
+            params = config["models"].get(model_key, {})
+            # 环境变量替换
+            for k, v in params.items():
+                if isinstance(v, str) and v.startswith("${") and v.endswith("}"):
+                    env_key = v[2:-1]
+                    params[k] = os.getenv(env_key, "")
+            # 允许外部参数覆盖配置文件
+            if api_key:
+                params["api_key"] = api_key
+            if base_url:
+                params["base_url"] = base_url
+            if custom_llm_provider:
+                params["custom_llm_provider"] = custom_llm_provider
+            return cls(model=model_key, **params)
+        except Exception:
+            # 3. 回退到环境变量
+            return cls(
+                model=model_name or os.getenv("DEFAULT_LLM"),
+                api_key=api_key or os.getenv("OPENAI_API_KEY"),
+                base_url=base_url,
+                custom_llm_provider=custom_llm_provider
+            )
 
 
 if __name__ == "__main__":

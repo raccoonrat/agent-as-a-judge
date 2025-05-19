@@ -12,6 +12,7 @@ import io
 
 from agent_as_a_judge.agent import JudgeAgent
 from agent_as_a_judge.config import AgentConfig
+from agent_as_a_judge.llm.provider import LLM
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
@@ -19,8 +20,9 @@ logging.basicConfig(
 console = Console()
 
 
-def main(agent_config: AgentConfig, initial_question: str, logger: logging.Logger):
+def main(agent_config: AgentConfig, initial_question: str, logger: logging.Logger, model_name=None):
     workspace = agent_config.workspace_dir
+    llm = LLM.from_config(model_name=model_name) if model_name else LLM.from_config()
     judge_agent = JudgeAgent(
         workspace=workspace,
         instance=None,
@@ -28,6 +30,7 @@ def main(agent_config: AgentConfig, initial_question: str, logger: logging.Logge
         trajectory_file=None,
         config=agent_config,
     )
+    judge_agent.llm = llm
 
     handle_question(judge_agent, initial_question, logger)
     while True:
@@ -103,6 +106,9 @@ def parse_arguments():
         default=[".DS_Store"],
         help="Files to exclude in search",
     )
+    parser.add_argument(
+        "--model", type=str, default=None, help="LLM model name (see llm_config.yaml)"
+    )
 
     return parser.parse_args()
 
@@ -131,4 +137,5 @@ if __name__ == "__main__":
         agent_config=agent_config,
         initial_question=args.question,
         logger=logger,
+        model_name=args.model,
     )
