@@ -8,28 +8,14 @@ import yaml
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
-    import litellm
-
-from litellm import completion as litellm_completion
-from litellm import completion_cost as litellm_completion_cost
-from litellm.exceptions import (
-    APIConnectionError,
-    RateLimitError,
-    ServiceUnavailableError,
-)
-from tenacity import (
-    retry,
-    retry_if_exception_type,
-    stop_after_attempt,
-    wait_random_exponential,
-)
-
-os.environ["LITELLM_LOG"] = "DEBUG"
+    try:
+        import litellm
+    except ImportError:
+        litellm = None
 
 __all__ = ["LLM"]
 
 message_separator = "\n\n----------\n\n"
-
 
 class LLM:
     def __init__(
@@ -45,13 +31,14 @@ class LLM:
         llm_temperature=0.7,
         llm_top_p=0.9,
         custom_llm_provider=None,
+        provider="litellm",
         max_input_tokens=4096,
         max_output_tokens=2048,
         cost=None,
+        **kwargs
     ):
         from agent_as_a_judge.llm.cost import Cost
         self.cost = Cost()
-        # 优先使用传入参数，否则用环境变量
         self.model_name = model or os.getenv("DEFAULT_LLM")
         self.api_key = api_key or os.getenv("OPENAI_API_KEY")
         self.base_url = base_url
@@ -65,112 +52,186 @@ class LLM:
         self.retry_min_wait = retry_min_wait
         self.retry_max_wait = retry_max_wait
         self.custom_llm_provider = custom_llm_provider
-        # 适配 qwen-plus、ollama、openai 等
-        if self.model_name and self.model_name.startswith("qwen-plus"):
-            if not self.custom_llm_provider:
-                self.custom_llm_provider = "qwen"
-            if not self.base_url:
-                self.base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1"
-        elif self.model_name and self.model_name.startswith("ollama"):
-            if not self.base_url:
-                self.base_url = "http://localhost:11434"
-            if not self.custom_llm_provider:
-                self.custom_llm_provider = "ollama"
-        elif self.model_name and self.model_name.startswith("gpt"):
-            if not self.base_url:
-                self.base_url = "https://api.openai.com/v1"
-            if not self.custom_llm_provider:
-                self.custom_llm_provider = "openai"
-
+        self.provider = provider or custom_llm_provider or "litellm"
+        self.kwargs = kwargs
         self.model_info = None
-        try:
-            self.model_info = litellm.get_model_info(self.model_name)
-        except Exception:
-            print(f"Could not get model info for {self.model_name}")
-
-        if self.max_input_tokens is None and self.model_info:
-            self.max_input_tokens = self.model_info.get("max_input_tokens", 4096)
-        if self.max_output_tokens is None and self.model_info:
-            self.max_output_tokens = self.model_info.get("max_output_tokens", 1024)
-
         self._initialize_completion_function()
 
     def _initialize_completion_function(self):
-        # 确保 custom_llm_provider 正确传递
-        completion_func = partial(
-            litellm_completion,
-            model=self.model_name,
-            api_key=self.api_key,
-            base_url=self.base_url,
-            api_version=self.api_version,
-            custom_llm_provider=self.custom_llm_provider,
-            max_tokens=self.max_output_tokens,
-            timeout=self.llm_timeout,
-            temperature=self.llm_temperature,
-            top_p=self.llm_top_p,
-        )
-
-        def attempt_on_error(retry_state):
-            print(f"Could not get model info for {self.model_name}")
-            return True
-
-        @retry(
-            reraise=True,
-            stop=stop_after_attempt(self.num_retries),
-            wait=wait_random_exponential(
-                min=self.retry_min_wait, max=self.retry_max_wait
-            ),
-            retry=retry_if_exception_type(
-                (RateLimitError, APIConnectionError, ServiceUnavailableError)
-            ),
-            after=attempt_on_error,
-        )
-        def wrapper(*args, **kwargs):
-            resp = completion_func(*args, **kwargs)
-            message_back = resp["choices"][0]["message"]["content"]
-            return resp, message_back
-
-        self._completion = wrapper
+        if self.provider == "litellm":
+            if litellm is None:
+                raise ImportError("litellm is not installed.")
+            completion_func = partial(
+                litellm.completion,
+                model=self.model_name,
+                api_key=self.api_key,
+                base_url=self.base_url,
+                api_version=self.api_version,
+                custom_llm_provider=self.custom_llm_provider,
+                max_tokens=self.max_output_tokens,
+                timeout=self.llm_timeout,
+                temperature=self.llm_temperature,
+                top_p=self.llm_top_p,
+            )
+            def wrapper(*args, **kwargs):
+                resp = completion_func(*args, **kwargs)
+                message_back = resp["choices"][0]["message"]["content"]
+                return resp, message_back
+            self._completion = wrapper
+        elif self.provider == "qwen":
+            def wrapper(messages, **kwargs):
+                url = self.base_url or "https://dashscope.aliyuncs.com/compatible-mode/v1"
+                headers = {"Authorization": f"Bearer {self.api_key}"}
+                data = {
+                    "model": self.model_name,
+                    "input": {"messages": messages},
+                    "parameters": {
+                        "temperature": self.llm_temperature,
+                        "top_p": self.llm_top_p,
+                        "max_tokens": self.max_output_tokens,
+                    }
+                }
+                data.update(kwargs)
+                resp = requests.post(url, headers=headers, json=data, timeout=self.llm_timeout)
+                resp.raise_for_status()
+                result = resp.json()
+                # 兼容 litellm 返回格式
+                message_back = result.get("output", {}).get("choices", [{}])[0].get("message", {}).get("content", "")
+                return result, message_back
+            self._completion = wrapper
+        elif self.provider == "baichuan":
+            def wrapper(messages, **kwargs):
+                url = self.base_url or "https://api.baichuan-ai.com/v1/chat/completions"
+                headers = {"Authorization": f"Bearer {self.api_key}"}
+                data = {
+                    "model": self.model_name,
+                    "messages": messages,
+                    "temperature": self.llm_temperature,
+                    "top_p": self.llm_top_p,
+                    "max_tokens": self.max_output_tokens,
+                }
+                data.update(kwargs)
+                resp = requests.post(url, headers=headers, json=data, timeout=self.llm_timeout)
+                resp.raise_for_status()
+                result = resp.json()
+                message_back = result.get("choices", [{}])[0].get("message", {}).get("content", "")
+                return result, message_back
+            self._completion = wrapper
+        elif self.provider == "glm":
+            def wrapper(messages, **kwargs):
+                url = self.base_url or "https://open.bigmodel.cn/api/paas/v4/chat/completions"
+                headers = {"Authorization": f"Bearer {self.api_key}"}
+                data = {
+                    "model": self.model_name,
+                    "messages": messages,
+                    "temperature": self.llm_temperature,
+                    "top_p": self.llm_top_p,
+                    "max_tokens": self.max_output_tokens,
+                }
+                data.update(kwargs)
+                resp = requests.post(url, headers=headers, json=data, timeout=self.llm_timeout)
+                resp.raise_for_status()
+                result = resp.json()
+                message_back = result.get("choices", [{}])[0].get("message", {}).get("content", "")
+                return result, message_back
+            self._completion = wrapper
+        elif self.provider == "minimax":
+            def wrapper(messages, **kwargs):
+                url = self.base_url or "https://api.minimax.chat/v1/text/chatcompletion"
+                headers = {"Authorization": f"Bearer {self.api_key}"}
+                data = {
+                    "model": self.model_name,
+                    "messages": messages,
+                    "temperature": self.llm_temperature,
+                    "top_p": self.llm_top_p,
+                    "max_tokens": self.max_output_tokens,
+                }
+                data.update(kwargs)
+                resp = requests.post(url, headers=headers, json=data, timeout=self.llm_timeout)
+                resp.raise_for_status()
+                result = resp.json()
+                message_back = result.get("choices", [{}])[0].get("message", {}).get("content", "")
+                return result, message_back
+            self._completion = wrapper
+        elif self.provider == "spark":
+            def wrapper(messages, **kwargs):
+                url = self.base_url or "https://spark-api.xf-yun.com/v3.5/chat"
+                headers = {"Authorization": f"Bearer {self.api_key}"}
+                data = {
+                    "model": self.model_name,
+                    "messages": messages,
+                    "temperature": self.llm_temperature,
+                    "top_p": self.llm_top_p,
+                    "max_tokens": self.max_output_tokens,
+                }
+                data.update(kwargs)
+                resp = requests.post(url, headers=headers, json=data, timeout=self.llm_timeout)
+                resp.raise_for_status()
+                result = resp.json()
+                message_back = result.get("choices", [{}])[0].get("message", {}).get("content", "")
+                return result, message_back
+            self._completion = wrapper
+        elif self.provider == "custom_http":
+            def wrapper(messages, **kwargs):
+                url = self.base_url
+                headers = {"Authorization": f"Bearer {self.api_key}"}
+                data = {
+                    "model": self.model_name,
+                    "messages": messages,
+                    "temperature": self.llm_temperature,
+                    "top_p": self.llm_top_p,
+                    "max_tokens": self.max_output_tokens,
+                }
+                data.update(kwargs)
+                resp = requests.post(url, headers=headers, json=data, timeout=self.llm_timeout)
+                resp.raise_for_status()
+                result = resp.json()
+                message_back = result.get("choices", [{}])[0].get("message", {}).get("content", "")
+                return result, message_back
+            self._completion = wrapper
+        else:
+            raise ValueError(f"Unknown provider: {self.provider}")
 
     @property
     def completion(self):
         return self._completion
 
     def _llm_inference(self, messages: list) -> dict:
-        """Perform LLM inference using the provided messages."""
         start_time = time.time()
-        response, cost, accumulated_cost = self.do_completion(
-            messages=messages, temperature=0.0
-        )
+        response, cost, accumulated_cost = self.do_completion(messages=messages, temperature=0.0)
         inference_time = time.time() - start_time
-
-        llm_response = response.choices[0].message["content"]
-        input_token, output_token = (
-            response.usage.prompt_tokens,
-            response.usage.completion_tokens,
-        )
-
+        llm_response = response["choices"][0]["message"]["content"] if "choices" in response else ""
+        input_token = response.get("usage", {}).get("prompt_tokens", 0)
+        output_token = response.get("usage", {}).get("completion_tokens", 0)
         return {
             "llm_response": llm_response,
             "input_tokens": input_token,
             "output_tokens": output_token,
-            "cost": cost,
-            "accumulated_cost": accumulated_cost,
+            "cost": cost if "cost" in locals() else 0,
+            "accumulated_cost": accumulated_cost if "accumulated_cost" in locals() else 0,
             "inference_time": inference_time,
         }
 
     def do_completion(self, *args, **kwargs):
         resp, msg = self._completion(*args, **kwargs)
-        cur_cost, accumulated_cost = self.post_completion(resp)
+        cur_cost, accumulated_cost = 0, 0
+        try:
+            cur_cost, accumulated_cost = self.post_completion(resp)
+        except Exception:
+            pass
         return resp, cur_cost, accumulated_cost
 
-    def post_completion(self, response: str):
-        try:
-            cur_cost = self.completion_cost(response)
-        except Exception:
-            cur_cost = 0
-
-        return cur_cost, self.cost.accumulated_cost  # , cost_msg
+    def post_completion(self, response: dict):
+        # 仅 litellm 支持计费
+        if self.provider == "litellm" and litellm is not None:
+            try:
+                cost = litellm.completion_cost(completion_response=response)
+                if self.cost:
+                    self.cost.add_cost(cost)
+                return cost, self.cost.accumulated_cost
+            except Exception:
+                pass
+        return 0.0, 0.0
 
     def get_token_count(self, messages):
         return litellm.token_counter(model=self.model_name, messages=messages)
@@ -188,7 +249,7 @@ class LLM:
     def completion_cost(self, response):
         if not self.is_local():
             try:
-                cost = litellm_completion_cost(completion_response=response)
+                cost = litellm.completion_cost(completion_response=response)
                 if self.cost:
                     self.cost.add_cost(cost)
                 return cost
@@ -234,12 +295,9 @@ class LLM:
         api_key=None,
         base_url=None,
         custom_llm_provider=None,
+        provider=None,
         config_path="llm_config.yaml"
     ):
-        # 1. 优先用显式传入参数
-        if model_name and api_key:
-            return cls(model=model_name, api_key=api_key, base_url=base_url, custom_llm_provider=custom_llm_provider)
-        # 2. 查找配置文件
         try:
             with open(config_path, "r", encoding="utf-8") as f:
                 config = yaml.safe_load(f)
@@ -257,14 +315,17 @@ class LLM:
                 params["base_url"] = base_url
             if custom_llm_provider:
                 params["custom_llm_provider"] = custom_llm_provider
+            if provider:
+                params["provider"] = provider
             return cls(model=model_key, **params)
         except Exception:
-            # 3. 回退到环境变量
+            # 兜底：环境变量
             return cls(
                 model=model_name or os.getenv("DEFAULT_LLM"),
                 api_key=api_key or os.getenv("OPENAI_API_KEY"),
                 base_url=base_url,
-                custom_llm_provider=custom_llm_provider
+                custom_llm_provider=custom_llm_provider,
+                provider=provider or os.getenv("LLM_PROVIDER", "litellm")
             )
 
 
