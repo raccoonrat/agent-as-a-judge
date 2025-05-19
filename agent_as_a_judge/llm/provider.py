@@ -3,6 +3,7 @@ import time
 from functools import partial
 import os
 from dotenv import load_dotenv
+import requests
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
@@ -47,10 +48,16 @@ class LLM:
         max_output_tokens=2048,
         cost=None,
     ):
-
         from agent_as_a_judge.llm.cost import Cost
-
         self.cost = Cost()
+
+        # 适配 qwen-plus
+        if model and model.startswith("qwen-plus"):
+            if not custom_llm_provider:
+                custom_llm_provider = "qwen"
+            if not base_url:
+                base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1"
+
         self.model_name = model
         self.api_key = api_key
         self.base_url = base_url
@@ -79,6 +86,7 @@ class LLM:
         self._initialize_completion_function()
 
     def _initialize_completion_function(self):
+        # 确保 custom_llm_provider 正确传递
         completion_func = partial(
             litellm_completion,
             model=self.model_name,
@@ -108,10 +116,8 @@ class LLM:
             after=attempt_on_error,
         )
         def wrapper(*args, **kwargs):
-
             resp = completion_func(*args, **kwargs)
             message_back = resp["choices"][0]["message"]["content"]
-            # logger.debug(message_back)
             return resp, message_back
 
         self._completion = wrapper
@@ -215,9 +221,9 @@ class LLM:
 if __name__ == "__main__":
     load_dotenv()
 
-    model_name = "gpt-4o-2024-08-06"
-    api_key = os.getenv("OPENAI_API_KEY")
-    base_url = "https://api.openai.com/v1"
+    model_name = "qwen-plus"
+    api_key = os.getenv("DASHSCOPE_API_KEY")
+    base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 
     llm_instance = LLM(model=model_name, api_key=api_key, base_url=base_url)
 
@@ -226,6 +232,7 @@ if __name__ == "__main__":
     for i in range(1):
 
         multimodal_response = llm_instance.do_multimodal_completion(
-            "What’s in this image?", image_path
+            "What's in this image?", image_path
         )
         print(multimodal_response)
+
